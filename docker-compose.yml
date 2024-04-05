@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+    laravel-php-postgresql-environment:
+        build: .
+        image: custom-laravel-php
+        volumes:
+            - ./doc-root:/var/www/html/
+            - C:/Users/MohammedKAMARI/Documents/Docker:/var/www/html/crud_user:rw
+        environment:
+            POSTGRES_DB: laravel_db
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: Bakchlamo@@12345
+        ports:
+            - 8090:80
+
+
