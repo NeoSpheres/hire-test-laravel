@@ -6,7 +6,7 @@ services:
             context: .  # Chemin du contexte de build
             dockerfile: Dockerfile  # Chemin du Dockerfile
         volumes:
-            - ./app:/var/www/html
+            - ./:/var/www/html  # Utilisation du chemin absolu du répertoire racine du projet
         networks:
             - laravel-network
 
@@ -15,9 +15,8 @@ services:
         ports:
             - "14200:80"
         volumes:
-
             - ./nginx/config.d/default.conf:/etc/nginx/conf.d/default.conf
-            - ./app:/var/www/html
+            - ./:/var/www/html  # Utilisation du chemin absolu du répertoire racine du projet
         depends_on:
             - php-fpm
         networks:
@@ -30,8 +29,8 @@ services:
             - "14432:5432"
         environment:
             POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: Bakchlamo@@12345
-            POSTGRES_DB: test1
+            POSTGRES_PASSWORD: arnoldetmaX291
+            POSTGRES_DB: Crud
         volumes:
             - postgresql_data:/var/lib/postgresql/data
         networks:
