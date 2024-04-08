@@ -13,14 +13,32 @@ class UserTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function user_can_be_add(): void
+    public function test_if_user_is_created(): void
     {
-       $response = $this->post('users',[
-          'label' => 'Un nouveau Utilisateur',
-           'send_at ' => Carbon::tomorrow()
+        $userArray =[
+            'name' => 'user_test1',
+            'email' => 'user_test1@test.fr',
+            'password' => '12345678'
+        ];
+        //dd($userArray);
 
-       ]);
-        $response->assertOk();
-        $this->assertCount(1,Order::all());
+        // Send a POST request to create the new player
+        $response = $this->post('/user', $userArray);
+        //dd($response);
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('users', ['email' => 'user_test1@test.fr']);
+    }
+
+    public function test_if_user_is_deleted(): void
+    {
+        $userArray =[
+            'name' => 'user_test1',
+            'email' => 'user_test1@test.fr',
+            'password' => '12345678'
+        ];
+        //dd($userArray);
+
+
     }
 }
