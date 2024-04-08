@@ -1,14 +1,19 @@
 # test-recrutement-laravel
+
 Mini backoffice to test applicants tech level with Laravel
+
 # Pré-requis:
+* 
 * Editeur : exp: PHPSTORM
 * PHP
 * Composer
 
 # Installation:
+* 
 * Installation PHP
 * Installation de Composer
 * Configuration de l'environnement .env :
+
 /*
 APP_NAME=Laravel
 APP_ENV=local
@@ -33,7 +38,7 @@ LOG_LEVEL=debug
 
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
-DB_PORT=5432
+DB_PORT=14432
 DB_DATABASE=test1
 DB_USERNAME=postgres
 DB_PASSWORD=Bakchlamo@@12345
