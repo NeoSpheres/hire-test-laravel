@@ -1,0 +1,55 @@
+/* Styles pour la page de réglages */
+.settings-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.settings-item {
+    margin-bottom: 20px;
+}
+
+.settings-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.settings-item input[type="color"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #37C998;
+    color: white;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #2a9d8f;
+}
+
+/* Responsive design pour les petits écrans */
+@media (max-width: 768px) {
+    .settings-page {
+        width: auto;
+        margin: 20px;
+    }
+
+    .settings-item input[type="color"] {
+        width: auto;
+    }
+}
