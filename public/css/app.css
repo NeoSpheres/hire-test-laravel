@@ -18,22 +18,34 @@ body {
     width: 80%;
     margin: 0 auto;
 }
+h1{
+    color: #1a202c;
+}
 
-/* Topbar */
 .topbar {
-    background-color: #007bff;
+    background-color: #37C998;
     color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 10px 0;
 }
 
+
 .topbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+/* Style for h1 element */
+.topbar h1 {
+    margin: 0;
 }
 
 /* Sidebar */
 .sidebar {
+    height: 100vh;
+    position: fixed;
     width: 250px;
     background-color: #343a40;
     color: #fff;
@@ -61,24 +73,25 @@ body {
 
 /* Content */
 .content {
-    margin-left: 270px; /* Sidebar width + margin */
-    padding: 20px;
+    margin-left: 250px;
+    padding: 30px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .container {
-        width: 90%;
-    }
-
     .sidebar {
-        width: 100%;
-        margin-bottom: 20px;
+        position: relative;
+        height: auto;
     }
 
     .content {
         margin-left: 0;
+    }
+
+    .topbar .container {
+        flex-direction: column;
     }
 }
