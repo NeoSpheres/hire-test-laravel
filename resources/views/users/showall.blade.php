@@ -1,44 +1,50 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+@extends('users.layout')
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+@section('content')
 
-    <title>Hello, world!</title>
-</head>
-<body>
-<section class="container mt-5">
     @if(session('success'))
         <div class="alert alert-success">{{session('success')}}</div>
     @endif
+
+    <div class="d-flex justify-content-between">
+        <div>
+            <h1>List of users :</h1>
+        </div>
+        <div>
+            <a class="btn btn-success ml-auto" href="{{ route('user.create') }}">Add user</a>
+        </div>
+    </div>
+
     <table class="table">
         <thead class="thead-dark">
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">UserName</th>
-            <th scope="col">Email</th>
-            <th scope="col">Action</th>
-        </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">UserName</th>
+                <th scope="col">Email</th>
+                <th scope="col">Action</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach($data as $key =>$val)
-        <tr>
-            <th scope="row">{{++$key}}</th>
-            <td>{{$val->name}}</td>
-            <td>{{$val->email}}</td>
-            <td>
-                <a href="{{ route('user.edit',$val->id) }}" class="btn btn-secondary">Edit</a>
-                <a href="{{ route('user.show',$val->id) }}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        @endforeach
+            @foreach($data as $key =>$val)
+            <tr>
+                <th scope="row">{{++$key}}</th>
+                <td>{{$val->name}}</td>
+                <td>{{$val->email}}</td>
+                <td>
+                    <a href="{{route('user.show', $val->id)}}" class="btn btn-secondary mx-2">Show</a>
+                    <a href="{{ route('user.edit',$val->id) }}" class="btn btn-secondary mx-2">Edit</a>
+                    <form action="{{ route('user.destroy', $val->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger mx-2" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
         </tbody>
     </table>
-</section>
 
-</body>
-</html>
+    {{$data->links()}}
+
+@endsection
+
