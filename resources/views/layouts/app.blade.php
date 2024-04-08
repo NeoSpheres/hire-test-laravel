@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @yield('head')
-    <title>@yield('title', 'Page par défaut')</title>
+    <title>@yield('title', 'Crud app')</title>
 </head>
 <body>
 
@@ -18,17 +22,26 @@
 
     </div>
 </div>
-<!-- Sidebar -->
-<div class="sidebar" style="background-color: {{ $settings->sidebar_color ?? 'default-color' }}">
-    <ul>
-        <li><a href="{{ url('/') }}">Accueil</a></li>
-        <li><a href="{{ url('/user') }}">Utilisateurs</a></li>
-        <li><a href="{{ url('/setting') }}">Réglages</a></li>
-    </ul>
-</div>
 
-<div class="main-content">
-    @yield('content')
+<!-- Content -->
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 sidebar" style="background-color: {{ $settings->sidebar_color ?? 'default-color' }}">
+            <ul>
+                <li><a href="{{ url('/') }}">Accueil</a></li>
+                <li><a href="{{ url('/user') }}">Utilisateurs</a></li>
+                <li><a href="{{ url('/setting') }}">Réglages</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 offset-md-2">
+            <section class="container mt-5 ml-auto">
+                @yield('content')
+            </section>
+        </div>
+    </div>
 </div>
 
 </body>
