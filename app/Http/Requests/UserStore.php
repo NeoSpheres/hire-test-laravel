@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Route;
 
 class   UserStore extends FormRequest
 {
@@ -21,14 +22,20 @@ class   UserStore extends FormRequest
      */
     public function rules(): array
     {
-        $emailRule='unique:users';
-        if($this->method()=='PATCH'){
-            $emailRule='unique:users,email'.$this->user;
+        $userId = Route::input('user');
+
+        $emailRule='required|email|unique:users,email';
+
+        // Validation d'unicité en ignorant l'ID de l'utilisateur en cours de modification
+        if($this->method() == 'PATCH'){
+            $emailRule .= ','.$userId;
         }
+
         return [
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => $emailRule,
             'password' => 'required|min:8',
         ];
+
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User ;
-use Illuminate\Http\Request;
 use App\Http\Requests\UserStore;
+use Illuminate\Validation\Rule;
 
 
 class UserController extends Controller
@@ -14,8 +14,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $data=User::all();
-        return view('users.showall',compact('data'));
+        $data = User::latest()->paginate(5);
+        return view('users.showall', compact('data'))->with(request()->input('page'));
     }
 
     /**
@@ -34,7 +34,7 @@ class UserController extends Controller
         $input = $request-> validated();
         $input['password']= bcrypt($input['password']);
         User::create($input);
-        return redirect()->back()->withSuccess('User created');
+        return redirect()->route('user.index')->with('success', 'User created successfully !');
     }
 
     /**
@@ -42,8 +42,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        User::destroy($id);
-        return redirect()->back()->withSuccess('Users is deleted');
+        $user = User::find($id);
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -60,10 +60,18 @@ class UserController extends Controller
      */
     public function update(UserStore $request, string $id)
     {
+        $user = User::where('id',$id);
         $input = $request-> validated();
-        $input['password']= bcrypt($input['password']);
-        User::where('id',$id)->update($input);
-        return redirect()->back()->withSuccess('User updated');
+
+        // Ne mettre à jour le mot de passe que s'il est fourni
+        if(empty($input['password'])) {
+            unset($input['password']);
+        } else {
+            $input['password'] = bcrypt($input['password']);
+        }
+
+        $user->update($input);
+        return redirect()->route('user.index')->with('success','User updated successfully !');
     }
 
     /**
@@ -71,6 +79,8 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('user.index')->with('success', 'User deleted successfully !');
     }
 }

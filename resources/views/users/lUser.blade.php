@@ -15,16 +15,16 @@
     @if(session('success'))
         <div class="alert alert-success">{{session('success')}}</div>
     @endif
-        <table class="table">
-            <thead class="thead-dark">
+    <table class="table">
+        <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">First</th>
                 <th scope="col">Last</th>
                 <th scope="col">Handle</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             @foreach($data as $key =>$val) @endforeach
             <tr>
                 <th scope="row">{{++$key}}</th>
@@ -35,8 +35,10 @@
                     <a href="{{ route('user.destroy',$val->id) }}" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
-            </tbody>
-        </table>
+            @endforeach
+        </tbody>
+    </table>
+
 </section>
 
 </body>
