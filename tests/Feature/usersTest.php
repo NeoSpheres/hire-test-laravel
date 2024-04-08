@@ -6,16 +6,40 @@ use App\Models\post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class usersTest extends TestCase
 {
+    use RefreshDatabase;
 
-    public function test_user(): void
+    public function test_if_user_is_created(): void
     {
-        $response = $this->get('/user');
+        $userArray =[
+            'name' => 'user_test1',
+            'email' => 'user_test1@test.fr',
+            'password' => '12345678'
+        ];
+        //dd($userArray);
 
-        $response->assertStatus(200);
+        // Send a POST request to create the new player
+        $response = $this->post('/user', $userArray);
+        //dd($response);
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('users', ['email' => 'user_test1@test.fr']);
+    }
+
+    public function test_if_user_is_deleted(): void
+    {
+        $userArray =[
+            'name' => 'user_test1',
+            'email' => 'user_test1@test.fr',
+            'password' => '12345678'
+        ];
+        //dd($userArray);
+
+
     }
 
    /* public function  test_user_insert(){
@@ -32,7 +56,7 @@ class usersTest extends TestCase
        // $response->assertSee('User is here');
 
     }
-*/
+
    public function test_user_Factories()
     {
        // $users = User::factory(5)->create(); // with create we can make insertion in our databases based on our factory model
@@ -44,7 +68,7 @@ class usersTest extends TestCase
            return !$collection->contains($users); //Vérifie que la vue retournée par la route contient une variable 'users' et que cette variable ne contient pas les utilisateurs générés précédemment.
         });
     }
-/*
+
     public function test_post_Factories()
     {
         //$posts = post::factory(5)->create(); // with create we can make insertion in our databases based on our factory model
