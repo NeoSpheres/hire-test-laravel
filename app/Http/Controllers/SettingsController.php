@@ -29,11 +29,4 @@ class SettingsController extends Controller
 
         return redirect()->back()->with('success', 'Réglages sauvegardés avec succès!');
     }
-
-    public function getSettings()
-    {
-        return Setting::first();
-    }
-
-
 }
