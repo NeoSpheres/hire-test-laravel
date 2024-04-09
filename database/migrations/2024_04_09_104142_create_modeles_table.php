@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+
+        Schema::create('modeles', function (Blueprint $table) {
+            $table->increments('idModel')->startingValue(100);
+            $table->string('nomModel');
+            $table->integer('idBrand');
+            $table->string('matricule');
+            $table->string('color');
+            $table->string('engine');
+            $table->timestamps();
+
+        });
+        DB::statement("ALTER TABLE modeles ADD CONSTRAINT engine_check CHECK (engine IN ('Petrol', 'Hybrid','Electric'))");
+
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('modeles');
+    }
+};
