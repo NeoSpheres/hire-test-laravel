@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreign('model_id')->references('id')->on('modeles');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('pays');
+            $table->string('color');
+            $table->string('matricule');
             $table->timestamps();
         });
     }

@@ -19,7 +19,7 @@
         <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
-            <!--<th>Brand</th>-->
+            <th>Brand</th>
             <th>Model</th>
             <th>Owner</th>
             <th>Country</th>
@@ -30,7 +30,9 @@
         @foreach($cars as $key =>$val)
             <tr>
                 <th scope="row">{{++$key}}</th>
-                <td>{{ $val->modele }}</td>
+                <td>{{ $val->modele->idBrand }}</td>
+                {{-- <td>{{ $val->modele->brand->name }}</td> --}}
+                <td>{{ $val->modele->nomModel }}</td>
                 <td>{{ $val->user->name }}</td>
                 <td>{{ $val->pays }}</td>
                 <td>

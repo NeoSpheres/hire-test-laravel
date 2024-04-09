@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -13,6 +14,7 @@ Route::get('/', function () {
 Route::resource('user',UserController::class);
 Route::resource('setting',SettingsController::class);
 Route::resource('cars',CarController::class);
+Route::resource('brands',BrandController::class);
 Route::resource('model',ModeleController::class);
 
 
