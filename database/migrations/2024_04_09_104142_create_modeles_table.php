@@ -14,7 +14,7 @@ return new class extends Migration
     {
 
         Schema::create('modeles', function (Blueprint $table) {
-            $table->increments('idModel')->startingValue(100);
+            $table->increments('id')->startingValue(100);
             $table->string('nomModel');
             $table->integer('idBrand');
             $table->string('matricule');
