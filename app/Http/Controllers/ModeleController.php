@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ModeleStore;
+use App\Models\Brand;
 use App\Models\Modele;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\AssignOp\Mod;
@@ -22,18 +23,34 @@ class ModeleController extends Controller
      */
     public function create()
     {
-        $brand=Modele::all();
-        return view('Modeles.create',compact('brand'));
+        $brands=Brand::all();
+        $matricule = generateMatricule();
+        return view('Modeles.create',compact('brands','matricule'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ModeleStore $request)
-    {
-        $input = $request-> validated();
-        Modele::create($input);
-        return redirect()->route('modeles.index')->with('success', 'model created successfully !');
+    public function store(Request $request)
+    { $request->validate([
+        'nomModel' => 'required|string',
+        'idBrand' => 'required',
+        'matricule_hidden' => 'required|string',
+        'color' => 'required|string',
+        'engine' => 'required|in:Petrol,Hybrid,Electric',
+    ]);
+
+        $matricule = $request->input('matricule_hidden');
+
+        Modele::create([
+            'nomModel' => $request->nomModel,
+            'idBrand' => $request->idBrand,
+            'matricule' => $matricule,
+            'color' => $request->color,
+            'engine' => $request->engine,
+        ]);
+
+        return redirect()->route('model.index')->with('success', 'Modèle créé avec succès.');
     }
 
     /**
@@ -41,7 +58,7 @@ class ModeleController extends Controller
      */
     public function show(Modele $model)
     {
-        return view('modeles.show', compact('model'));
+        return view('Modeles.show', compact('model'));
     }
 
     /**
@@ -49,7 +66,7 @@ class ModeleController extends Controller
      */
     public function edit(Modele $model)
     {
-        return view('modeles.edit', compact('model'));
+        return view('Modeles.edit', compact('model'));
     }
 
     /**
