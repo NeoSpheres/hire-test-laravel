@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\Modele;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CarController extends Controller
@@ -12,8 +14,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        $car = Car::latest()->paginate(5);
-        return view('cars.index', compact('car'))->with(request()->input('page'));
+        $cars = Car::latest()->paginate(5);
+        return view('cars.index', compact('cars'))->with(request()->input('page'));
     }
 
     /**
@@ -21,7 +23,9 @@ class CarController extends Controller
      */
     public function create()
     {
-        return view('cars.create');
+        $models = Modele::all();
+        $users = User::all();
+        return view('cars.create', compact('models', 'users'));
     }
 
     /**
@@ -29,7 +33,14 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->validate([
+            'model_id' => 'required|exists:modeles,id',
+            'user_id' => 'required|exists:users,id',
+            'pays' => 'required|string|max:255',
+        ]);
+
+        Car::create($input);
+        return redirect()->route('cars.index')->with('success', 'Car created successfully !');
     }
 
     /**
