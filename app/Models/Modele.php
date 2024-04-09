@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Modele extends Model
 {
     use HasFactory;
-
+  
     protected $fillable = [
         'nomModel',
         'idBrand',
@@ -18,10 +18,9 @@ class Modele extends Model
     ];
 
     public function Brand(){
-        return $this->belongsTo(Brand::class);
+        return $this->hasMany(Brand::class);
     }
-
     public function Car(){
-        return $this->hasMany(Car::class);
+        return $this->belongsTo(Car::class,'id');
     }
 }

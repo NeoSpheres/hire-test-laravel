@@ -6,6 +6,8 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
     {
         //
     }
+
+
 
     /**
      * Bootstrap any application services.
@@ -68,4 +72,6 @@ class AppServiceProvider extends ServiceProvider
                 return !$collection->contains($posts); //Vérifie que la vue retournée par la route contient une variable 'users' et que cette variable ne contient pas les utilisateurs générés précédemment.
             });
         }*/
+
+
 }
