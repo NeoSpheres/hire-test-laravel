@@ -10,6 +10,17 @@
             <form action="{{ route('cars.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
+                    <label for="idBrand">Brand :</label>
+                    <select name="idBrand" id="idBrand" class="form-control">
+                        @foreach ($brands as $brand)
+                            <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('idBrand')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="form-group">
                     <label for="model_id">Model :</label>
                     <select name="model_id" id="model_id" class="form-control">
                         @foreach ($models as $model)

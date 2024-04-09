@@ -12,12 +12,13 @@ class Car extends Model
     protected $fillable = [
         'model_id',
         'user_id',
-        'pays'
+        'color',
+        'matricule'
     ];
 
     public function modele()
     {
-        return $this->belongsTo(Modele::class, 'id_model');
+        return $this->belongsTo(Modele::class, 'model_id');
     }
 
     public function user()

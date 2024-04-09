@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Car;
 use App\Models\Modele;
 use App\Models\User;
@@ -24,8 +25,9 @@ class CarController extends Controller
     public function create()
     {
         $models = Modele::all();
+        $brands = Brand::all();
         $users = User::all();
-        return view('cars.create', compact('models', 'users'));
+        return view('cars.create', compact('models', 'brands', 'users'));
     }
 
     /**
@@ -48,7 +50,8 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        return view('cars.show', compact('car'));
+        $brand = Brand::find($car->modele->idBrand);
+        return view('cars.show', compact('car', 'brand'));
     }
 
     /**
@@ -56,7 +59,8 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        //
+        $brands = Brand::all();
+        return view('cars.edit',compact('car', 'brands'));
     }
 
     /**
