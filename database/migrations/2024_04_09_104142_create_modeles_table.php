@@ -17,7 +17,6 @@ return new class extends Migration
             $table->increments('id')->startingValue(100);
             $table->string('nomModel');
             $table->integer('idBrand');
-            $table->string('matricule');
             $table->string('color');
             $table->string('engine');
             $table->timestamps();

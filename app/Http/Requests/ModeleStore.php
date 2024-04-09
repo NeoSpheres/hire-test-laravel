@@ -23,10 +23,10 @@ class ModeleStore extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
+            'nomModel' => 'required',
             'idBrand' => 'required|exists:brands,id',
+            'matricule'=>['required|unique',new MatriculeFrance],
             'color'=>'required',
-            'matricule'=>['required|unique:modeles',new MatriculeFrance],
             'engine'=>'required',
         ];
     }
