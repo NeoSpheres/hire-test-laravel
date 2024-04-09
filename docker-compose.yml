@@ -32,15 +32,33 @@ services:
 #        networks:
 #            - laravel-network
 
+        #postgres:
+        #container_name: postgres_hire
+        #image: "postgres:13.8-alpine"
+            #volumes:
+            #- pgsql_data:/var/lib/postgresql/data
+            #environment:
+            #POSTGRES_PASSWORD: secret
+            #POSTGRES_USER: core_user
+            #POSTGRES_DB: test_company_db
+            #POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+        #restart: unless-stopped
+            #ports:
+            #- "14432:5432"
+    #volumes:
+    #pgsql_data:
+
+
+
     postgres:
         container_name: postgres_hire
         image: "postgres:13.8-alpine"
         volumes:
             - pgsql_data:/var/lib/postgresql/data
         environment:
-            POSTGRES_PASSWORD: secret
-            POSTGRES_USER: core_user
-            POSTGRES_DB: test_company_db
+            POSTGRES_PASSWORD: arnoldetmaX291
+            POSTGRES_USER: postgres
+            POSTGRES_DB: Crud
             POSTGRES_INITDB_ARGS: "--encoding=UTF8"
         restart: unless-stopped
         ports:
