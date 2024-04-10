@@ -1,0 +1,46 @@
+@extends('layouts.app')
+
+@section('content')
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Edit brand</h2>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('model.update', $model->id) }}" method="POST">
+                @csrf
+                @method('PATCH')
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="nomModel" class="form-control" value="{{ $model->nomModel }}">
+                    @error('nomModel')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Brand</label>
+                    <input type="text" name="idBrand" class="form-control" value="{{ $model->idBrand }}" disabled>
+                    <input type="hidden" name="idBrand" class="form-control" value="{{ $model->idBrand }}">
+                    @error('idBrand')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Engine</label>
+                    <select id="engine" name="engine" class="form-control">
+                        <option value="Hybrid" {{ $model->engine == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
+                        <option value="Electric" {{ $model->engine == 'Electric' ? 'selected' : '' }}>Electric</option>
+                        <option value="Petrol" {{ $model->engine == 'Petrol' ? 'selected' : '' }}>Petrol</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a class="btn btn-secondary" href="{{ route('model.index') }}">Back</a>
+                    <button type="submit" class="btn btn-primary m1-auto">Update</button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer"></div>
+    </div>
+
+
+@endsection
