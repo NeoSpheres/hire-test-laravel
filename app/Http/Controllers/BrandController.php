@@ -29,7 +29,7 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request-> validated([
+        $input = $request-> validate([
             'name' => 'required',
             'country' => 'required'
         ]);
@@ -58,7 +58,10 @@ class BrandController extends Controller
      */
     public function update(Request $request, Brand $brand)
     {
-        $input = $request-> validated();
+        $input = $request-> validate([
+            'name' => 'required',
+            'country' => 'required'
+        ]);
 
         $brand->update($input);
         return redirect()->route('brands.index')->with('success','Brand updated successfully !');

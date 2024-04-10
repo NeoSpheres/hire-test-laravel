@@ -27,7 +27,7 @@ class CarController extends Controller
         $models = Modele::all();
         $brands = Brand::all();
         $users = User::all();
-        return view('cars.create', compact('models', 'brands', 'users'));
+        return view('cars.create', compact('models','brands', 'users'));
     }
 
     /**
@@ -68,7 +68,11 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
-        $input = $request-> validated();
+        $input = $request->validate([
+            'model_id' => 'required|exists:modeles,id',
+            'user_id' => 'required|exists:users,id',
+            'pays' => 'required|string|max:255',
+        ]);
 
         $car->update($input);
         return redirect()->route('cars.index')->with('success','Car updated successfully !');
