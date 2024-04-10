@@ -19,11 +19,11 @@
                     </div>
                     <div class="mb-3">
                         <strong>Registration : </strong>
-                        {{$car->modele->matricule}}
+                        {{$car->matricule}}
                     </div>
                     <div class="mb-3">
                         <strong>Color : </strong>
-                        {{$car->modele->color}}
+                        {{$car->color}}
                     </div>
                     <div class="mb-3">
                         <strong>Type : </strong>
