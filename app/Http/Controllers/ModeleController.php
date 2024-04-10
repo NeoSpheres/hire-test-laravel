@@ -15,8 +15,10 @@ class ModeleController extends Controller
      */
     public function index()
     {
-        //
+        $data = Modele::latest()->paginate(5);
+        return view('Modeles.index', compact('data'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,8 +37,6 @@ class ModeleController extends Controller
     { $request->validate([
         'nomModel' => 'required|string',
         'idBrand' => 'required',
-        'matricule_hidden' => 'required|string',
-        'color' => 'required|string',
         'engine' => 'required|in:Petrol,Hybrid,Electric',
     ]);
 
@@ -45,8 +45,6 @@ class ModeleController extends Controller
         Modele::create([
             'nomModel' => $request->nomModel,
             'idBrand' => $request->idBrand,
-            'matricule' => $matricule,
-            'color' => $request->color,
             'engine' => $request->engine,
         ]);
 
@@ -56,9 +54,11 @@ class ModeleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Modele $model)
+    public function show(string $id)
     {
-        return view('Modeles.show', compact('model'));
+        $modele = Modele::find($id);
+        $brands=Brand::all();
+        return view('Modeles.show', compact('modele','brands'));
     }
 
     /**
@@ -74,10 +74,21 @@ class ModeleController extends Controller
      */
     public function update(Request $request, Modele $model)
     {
-        $input = $request-> validated();
-        $model->update($input);
-        return redirect()->route('modeles.update')->with('success', 'model updated successfully !');
+        $request->validate([
+            'nomModel' => 'required|string',
+            'idBrand' => 'required',
+            'engine' => 'required|in:Petrol,Hybrid,Electric',
+        ]);
+
+        $model->update([
+            'nomModel' => $request->nomModel,
+            'idBrand' => $request->idBrand,
+            'engine' => $request->engine,
+        ]);
+
+        return redirect()->route('modeles.index')->with('success', 'Modèle mis à jour avec succès.');
     }
+
 
     /**
      * Remove the specified resource from storage.
