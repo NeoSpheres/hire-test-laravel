@@ -81,6 +81,16 @@
                 modelSelect.appendChild(option);
             }
             @endforeach
+            
+            /*let models = @json($models);
+            models.forEach(function(model) {
+                if (model.idBrand == brandId) {
+                    var option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = model.nomModel;
+                    modelSelect.appendChild(option);
+                }
+            });*/
 
             modelSelect.disabled = false;
         });
