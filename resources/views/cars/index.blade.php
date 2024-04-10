@@ -34,6 +34,8 @@
                 <td>{{ $val->modele->brand->name }}</td>
                 <td>{{ $val->modele->nomModel }}</td>
                 <td>{{ $val->user->null}}</td>
+
+                <td>{{ $val->user ? $val->user->name : '' }}</td>
                 <td>{{ $val->color }}</td>
                 <td>{{ $val->matricule }}</td>
                 <td>

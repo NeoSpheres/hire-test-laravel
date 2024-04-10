@@ -81,7 +81,7 @@
                 modelSelect.appendChild(option);
             }
             @endforeach
-            
+
             /*let models = @json($models);
             models.forEach(function(model) {
                 if (model.idBrand == brandId) {
@@ -97,4 +97,3 @@
     </script>
 
 @endsection
-

@@ -32,6 +32,7 @@
                 <div class="form-group">
                     <label for="user_id">Owner :</label>
                     <select name="user_id" id="user_id" class="form-control">
+                        <option value=""></option>
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
