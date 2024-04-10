@@ -12,6 +12,7 @@
                 <div class="form-group">
                     <label for="idBrand">Brand :</label>
                     <select name="idBrand" id="idBrand" class="form-control">
+                        <option value="">Choose a brand</option>
                         @foreach ($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
@@ -22,10 +23,7 @@
                 </div>
                 <div class="form-group">
                     <label for="model_id">Model :</label>
-                    <select name="model_id" id="model_id" class="form-control">
-                        @foreach ($models as $model)
-                            <option value="{{ $model->id }}">{{ $model->nomModel }}</option>
-                        @endforeach
+                    <select name="model_id" id="model_id"  disabled class="form-control">
                     </select>
                     @error('model_id')
                     <p class="text text-danger">{{ $message }}</p>
@@ -43,9 +41,16 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label>Country</label>
-                    <input type="text" name="pays" class="form-control">
-                    @error('pays')
+                    <label>Color</label>
+                    <input type="text" name="color" class="form-control">
+                    @error('color')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Registration</label>
+                    <input type="text" name="matricule" class="form-control">
+                    @error('matricule')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
@@ -57,5 +62,37 @@
         </div>
         <div class="card-footer"></div>
     </div>
+
+    <script>
+        document.getElementById('idBrand').addEventListener('change', function() {
+            var brandId = this.value;
+            console.log(brandId);
+            var modelSelect = document.getElementById('model_id');
+
+            modelSelect.innerHTML = '<option value="">Choose a model</option>';
+
+            // Filtrer les modèles en fonction de la marque sélectionnée
+            @foreach($models as $model)
+            if ({{ $model->idBrand }} == brandId) {
+                var option = document.createElement('option');
+                option.value = '{{ $model->id }}';
+                option.textContent = '{{ $model->nomModel }}';
+                modelSelect.appendChild(option);
+            }
+            @endforeach
+
+            /*let models = @json($models);
+            models.forEach(function(model) {
+                if (model.idBrand == brandId) {
+                    var option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = model.nomModel;
+                    modelSelect.appendChild(option);
+                }
+            });*/
+
+            modelSelect.disabled = false;
+        });
+    </script>
 
 @endsection

@@ -22,7 +22,8 @@
             <th>Brand</th>
             <th>Model</th>
             <th>Owner</th>
-            <th>Country</th>
+            <th>Color</th>
+            <th>Registration</th>
             <th scope="col">Action</th>
         </tr>
         </thead>
@@ -30,18 +31,18 @@
         @foreach($cars as $key =>$val)
             <tr>
                 <th scope="row">{{++$key}}</th>
-                <td>{{ $val->modele->idBrand }}</td>
-                {{-- <td>{{ $val->modele->brand->name }}</td> --}}
+                <td>{{ $val->modele->brand->name }}</td>
                 <td>{{ $val->modele->nomModel }}</td>
                 <td>{{ $val->user->name }}</td>
-                <td>{{ $val->pays }}</td>
+                <td>{{ $car->color }}</td>
+                <td>{{ $car->matricule }}</td>
                 <td>
                     <a href="{{route('cars.show', $val->id)}}" class="btn btn-secondary mx-2">Show</a>
                     <a href="{{ route('cars.edit',$val->id) }}" class="btn btn-secondary mx-2">Edit</a>
                     <form action="{{ route('cars.destroy', $val->id) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger mx-2" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                        <button type="submit" class="btn btn-danger mx-2" onclick="return confirm('Are you sure you want to delete this car?')">Delete</button>
                     </form>
                 </td>
             </tr>

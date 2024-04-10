@@ -12,7 +12,6 @@ class Modele extends Model
     protected $fillable = [
         'nomModel',
         'idBrand',
-        'color',
         'engine'
     ];
 

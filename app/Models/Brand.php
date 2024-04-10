@@ -13,4 +13,8 @@ class Brand extends Model
         'name',
         'country'
     ];
+
+    public function modele(){
+        return $this->belongsTo(Modele::class,'id');
+    }
 }
