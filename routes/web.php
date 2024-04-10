@@ -16,5 +16,8 @@ Route::resource('setting',SettingsController::class);
 Route::resource('cars',CarController::class);
 Route::resource('brands',BrandController::class);
 Route::resource('model',ModeleController::class);
+Route::get('/get-models/{brand}', [ModeleController::class, 'getModelsByBrand'])->name('get-models');
+
+
 
 
