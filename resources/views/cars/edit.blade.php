@@ -12,7 +12,7 @@
                 @method('PATCH')
                 <div class="form-group">
                     <label>Brand</label>
-                    <select name="idBrand" id="id_Brand" class="form-control">
+                    <select name="idBrand" id="idBrand" class="form-control">
                         @foreach ($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
@@ -23,32 +23,38 @@
                 </div>
                 <div class="form-group">
                     <label>Model</label>
-                    <input type="text" name="model" class="form-control" value="{{$car->modele->nomModel}}">
-                    @error('model')
+                    <select name="model_id" id="model_id" class="form-control" disabled>
+                        <option value="{{$car->modele->id}}">{{$car->modele->nomModel}}</option>
+                    </select>
+                    @error('model_id')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label>Registration</label>
-                    <input type="text" name="matricule" class="form-control" value="{{$car->modele->matricule}}">
+                    <input type="text" name="matricule" class="form-control" value="{{$car->matricule}}" disabled>
                     @error('matricule')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label>Color</label>
-                    <input type="text" name="color" class="form-control" value="{{$car->modele->color}}">
+                    <input type="text" name="color" class="form-control" value="{{$car->color}}">
                     @error('color')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="form-group">
+                {{--<div class="form-group">
                     <label>Type</label>
-                    <input type="text" name="engine" class="form-control" value="{{$car->modele->engine}}">
+                    <select id="engine" name="engine" class="form-control">
+                        @foreach(['Hybrid', 'Electric', 'Petrol'] as $type)
+                            <option value="{{ $type }}" {{ $car->modele->engine == $type ? 'selected' : '' }}>{{ $type }}</option>
+                        @endforeach
+                    </select>
                     @error('engine')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
-                </div>
+                </div>--}}
                 <div class="d-flex justify-content-between">
                     <a class="btn btn-secondary" href="{{route('cars.index')}}">Back</a>
                     <button type="submit" class="btn btn-primary m1-auto">Update</button>
@@ -57,6 +63,38 @@
         </div>
         <div class="card-footer"></div>
     </div>
+
+    <script>
+        document.getElementById('idBrand').addEventListener('change', function() {
+            var brandId = this.value;
+            console.log(brandId);
+            var modelSelect = document.getElementById('model_id');
+
+            modelSelect.innerHTML = '<option value="">Choose a model</option>';
+
+            // Filtrer les modèles en fonction de la marque sélectionnée
+            @foreach($models as $model)
+            if ({{ $model->idBrand }} == brandId) {
+                var option = document.createElement('option');
+                option.value = '{{ $model->id }}';
+                option.textContent = '{{ $model->nomModel }}';
+                modelSelect.appendChild(option);
+            }
+            @endforeach
+            
+            /*let models = @json($models);
+            models.forEach(function(model) {
+                if (model.idBrand == brandId) {
+                    var option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = model.nomModel;
+                    modelSelect.appendChild(option);
+                }
+            });*/
+
+            modelSelect.disabled = false;
+        });
+    </script>
 
 @endsection
 

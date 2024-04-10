@@ -71,7 +71,8 @@ class CarController extends Controller
     public function edit(Car $car)
     {
         $brands = Brand::all();
-        return view('cars.edit',compact('car', 'brands'));
+        $models = Modele::all();
+        return view('cars.edit',compact('car', 'brands', 'models'));
     }
 
     /**
@@ -79,11 +80,7 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
-        $input = $request->validate([
-            'model_id' => 'required|exists:modeles,id',
-            'user_id' => 'required|exists:users,id',
-            'pays' => 'required|string|max:255',
-        ]);
+        $input = $request->except('matricule');
 
         $car->update($input);
         return redirect()->route('cars.index')->with('success','Car updated successfully !');
