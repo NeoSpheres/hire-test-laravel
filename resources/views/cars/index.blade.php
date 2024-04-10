@@ -34,8 +34,8 @@
                 <td>{{ $val->modele->brand->name }}</td>
                 <td>{{ $val->modele->nomModel }}</td>
                 <td>{{ $val->user->name }}</td>
-                <td>{{ $car->color }}</td>
-                <td>{{ $car->matricule }}</td>
+                <td>{{ $val->color }}</td>
+                <td>{{ $val->matricule }}</td>
                 <td>
                     <a href="{{route('cars.show', $val->id)}}" class="btn btn-secondary mx-2">Show</a>
                     <a href="{{ route('cars.edit',$val->id) }}" class="btn btn-secondary mx-2">Edit</a>

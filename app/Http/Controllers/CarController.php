@@ -8,6 +8,8 @@ use App\Models\Modele;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+include_once app_path().'/Helpers/MatriculeHelper.php';
+
 class CarController extends Controller
 {
     /**
@@ -27,7 +29,8 @@ class CarController extends Controller
         $models = Modele::all();
         $brands = Brand::all();
         $users = User::all();
-        return view('cars.create', compact('models','brands', 'users'));
+        $matricule = generateMatricule();
+        return view('cars.create', compact('models','brands', 'users', 'matricule'));
     }
 
     /**
@@ -35,13 +38,21 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->validate([
+        $request->validate([
             'model_id' => 'required|exists:modeles,id',
             'user_id' => 'required|exists:users,id',
-            'pays' => 'required|string|max:255',
+            'color' => 'required|string|max:25',
         ]);
 
-        Car::create($input);
+        $matricule = $request->input('matricule_hidden');
+
+        Car::create([
+            'model_id' => $request->model_id,
+            'user_id' => $request->user_id,
+            'color' => $request->color,
+            'matricule' => $matricule,
+        ]);
+
         return redirect()->route('cars.index')->with('success', 'Car created successfully !');
     }
 

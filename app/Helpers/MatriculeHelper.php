@@ -1,6 +1,7 @@
 <?php
 
-function generateMatricule() {
+function generateMatricule(): string
+{
     $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $numbers = '0123456789';
 
@@ -12,3 +13,5 @@ function generateMatricule() {
 
     return $matricule;
 }
+
+

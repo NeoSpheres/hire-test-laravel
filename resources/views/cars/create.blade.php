@@ -48,8 +48,9 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label>Registration</label>
-                    <input type="text" name="matricule" class="form-control">
+                    <label for="matricule">Registration</label>
+                    <input type="text" name="matricule" class="form-control" value="{{ $matricule }}" readonly disabled>
+                    <input type="hidden" name="matricule_hidden" value="{{ $matricule }}">
                     @error('matricule')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror

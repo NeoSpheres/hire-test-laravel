@@ -15,11 +15,6 @@
                     <label for="nom">Color:</label>
                     <input type="text" id="color" name="color" class="form-control">
                 </div>
-               <!-- <div>
-                    <label for="nom">Matricule:</label>
-                    <input type="text" name="matricule" value="{{ $matricule }}" class="form-control" readonly disabled>
-                    <input type="hidden" name="matricule_hidden" value="{{ $matricule }}">
-                </div> -->
 
                 <div class="form-group">
                     <label>Engine</label>
