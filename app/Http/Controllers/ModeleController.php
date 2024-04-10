@@ -34,13 +34,12 @@ class ModeleController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    { $request->validate([
+    {
+        $request->validate([
         'nomModel' => 'required|string',
         'idBrand' => 'required',
         'engine' => 'required|in:Petrol,Hybrid,Electric',
     ]);
-
-        $matricule = $request->input('matricule_hidden');
 
         Modele::create([
             'nomModel' => $request->nomModel,
@@ -66,28 +65,31 @@ class ModeleController extends Controller
      */
     public function edit(Modele $model)
     {
-        return view('Modeles.edit', compact('model'));
+        $brands = Brand::all();
+        return view('Modeles.editModel', compact('model','brands'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Modele $model)
     {
-        $request->validate([
+        // Validation des données
+        $validatedData = $request->validate([
             'nomModel' => 'required|string',
             'idBrand' => 'required',
             'engine' => 'required|in:Petrol,Hybrid,Electric',
         ]);
 
-        $model->update([
-            'nomModel' => $request->nomModel,
-            'idBrand' => $request->idBrand,
-            'engine' => $request->engine,
-        ]);
+        // Mise à jour du modèle dans la base de données
+        $model->update($validatedData);
 
-        return redirect()->route('modeles.index')->with('success', 'Modèle mis à jour avec succès.');
+        // Redirection après la mise à jour
+        return redirect()->route('model.index')->with('success', 'Modèle mis à jour avec succès.');
     }
+
+
 
 
     /**
@@ -96,7 +98,16 @@ class ModeleController extends Controller
     public function destroy(Modele $model)
     {
         $model->delete();
-        return redirect()->route('modeles.index')->with('success', 'Modèle supprimé avec succès.');
+        return redirect()->route('model.index')->with('success', 'Modèle supprimé avec succès.');
 
+    }
+
+    public function getModelsByBrand($brandId)
+    {
+        // Récupérer les modèles associés à la marque spécifiée
+        $models = Modele::where('idBrand', $brandId)->get();
+
+        // Retourner les modèles au format JSON
+        return response()->json($models);
     }
 }
