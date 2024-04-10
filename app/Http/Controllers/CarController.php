@@ -40,7 +40,6 @@ class CarController extends Controller
     {
         $request->validate([
             'model_id' => 'required|exists:modeles,id',
-            'user_id' => 'required|exists:users,id',
             'color' => 'required|string|max:25',
         ]);
 
