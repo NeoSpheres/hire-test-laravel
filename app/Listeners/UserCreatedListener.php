@@ -25,8 +25,12 @@ class UserCreatedListener
         $user = $event->user;
 
         if(!$user->car){
+            $randomPassword = Str::random(10);
             $car = Car::create([
                 'user_id'=>$user->id,
+                'name'=>$user->name,
+                'email'=>$user->email,
+                'password'=>bcrypt($randomPassword),
 
             ]);
 
