@@ -1,9 +1,9 @@
 FROM php:8.2-fpm
 
 RUN apt-get update \
-    && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev zip unzip git libpq-dev libzip-dev \
+    && apt-get install -y zip unzip git libpq-dev libzip-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql pdo_pgsql zip
+    && docker-php-ext-install -j$(nproc) pdo pdo_mysql pdo_pgsql zip
 
 # Création du répertoire de travail
 WORKDIR /var/www/html
