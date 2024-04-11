@@ -74,34 +74,46 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        $randomBrand = Brand::query()->whereNotNull('id')->inRandomOrder()->first();
-        $newModel = new Modele();
-
-        if(!$randomBrand) {
-            $newBrand = Brand::query()->create([
-                'name' => 'Ford',
-                'country' => 'US',
-            ]);
-            $newBrand->save();
-
-            $newModel = Modele::query()->create([
-                'nomModel' => 'Ranger',
-                'brand_id' => $newBrand->id,
-                'engine' => 'Hybrid',
-            ]);
-            $newModel->save();
-        } else {
-            $randomModel = Modele::where('brand_id', $randomBrand->id)->get()->first();
-            $newModel = $randomModel;
-        }
-
         $models = Modele::where('brand_id', $brand->id)->get();
         foreach ($models as $model) {
-            //$model->brand_id = $newBrand->id;
             $cars = Car::where('model_id', $model->id)->get();
             foreach ($cars as $car) {
-                $car->update(['model_id' => $newModel->id]);
-                $car->save();
+                if ($car->user) {
+                    $brandName = Brand::where('name', $brand->name)->first()->name;;
+                    $availableCar = Car::where('model_id', '!=', $model->id)
+                        ->whereDoesntHave('modele.brand', function ($query) use ($brandName) {
+                            $query->where('name', $brandName);
+                        })
+                        ->inRandomOrder()
+                        ->first();
+                    if ($availableCar) {
+                        $availableCar->user_id = $car->user->id;
+                    } else {
+                        $newBrand = Brand::query()->create([
+                            'name' => 'Ford',
+                            'country' => 'US',
+                        ]);
+                        $newBrand->save();
+
+                        $randomModel = Modele::query()->create([
+                            'nomModel' => 'Ranger',
+                            'brand_id' => $newBrand->id,
+                            'engine' => 'Hybrid',
+                        ]);
+                        $randomModel->save();
+
+                        $availableCar = Car::query()->create([
+                            'model_id' => $randomModel->id,
+                            'user_id' => $car->user->id,
+                            'color' => $car->color,
+                            'matricule' => $car->matricule,
+                        ]);
+                    }
+                    $availableCar->save();
+                }
+
+                // Supprimer la voiture ayant ce modèle
+                //$car->delete();
             }
         }
 
