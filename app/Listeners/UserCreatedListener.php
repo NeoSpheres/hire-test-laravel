@@ -28,21 +28,23 @@ class UserCreatedListener
     {
         $user = $event->user;
 
-        if(!$user->car){
-            $randomPassword = Str::random(10);
         // Récupérer les voitures disponibles et choisir la première
         $availableCar = Car::query()->whereNull('user_id')->first();
 
         if ($availableCar) {
             // Associer à l'utilisateur la voiture trouvée
             $availableCar->user_id = $user->id;
-            $availableCar->save();
-        }
+        } else {
+            $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
 
-        return $availableCar;
+            $availableCar = Car::query()->create([
+                'model_id' => $randomModel->id,
+                'user_id' => $user->id,
+                'color' => 'black', // Par défaut
+                'matricule' => generateMatricule(),
+            ]);
 
-        /*else {
-            // Sinon, créer une nouvelle voiture
+            /* Sinon, créer une nouvelle voiture
             $brand = Brand::query()->firstOrCreate([
                 'name' => 'NomDeLaMarque',
                 'country' => 'Pays'
@@ -52,17 +54,12 @@ class UserCreatedListener
                 'nomModel' => 'NomDuModele',
                 'idBrand' => $brand->id,
                 'engine' => 'TypeDuMoteur'
-            ]);
-
-
-            $car = Car::create([
-                'model_id' => $model->id,
-                'user_id' => $user->id,
-                'color' => 'black', // Par défaut
-                'matricule' => generateMatricule(),
-            ]);
-            $car->save();
+            ]);*/
         }
+        $availableCar->save();
+
+        return $availableCar;
+
 
         /*if(!$user->car){
             $car = Car::create([

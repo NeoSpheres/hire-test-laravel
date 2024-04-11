@@ -40,8 +40,6 @@ class CarController extends Controller
     {
         $request->validate([
             'model_id' => 'required|exists:modeles,id',
-            'user_id' => '|exists:users,id',
-
             'color' => 'required|string|max:25',
         ]);
 
@@ -49,7 +47,6 @@ class CarController extends Controller
 
         Car::create([
             'model_id' => $request->model_id,
-            'user_id' => $request->user_id,
             'color' => $request->color,
             'matricule' => $matricule,
         ]);
@@ -62,7 +59,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        $brand = Brand::find($car->modele->idBrand);
+        $brand = Brand::find($car->modele->brand_id);
         return view('cars.show', compact('car', 'brand'));
     }
 

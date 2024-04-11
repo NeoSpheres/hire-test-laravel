@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserCreated;
+use App\Models\Car;
 use App\Models\User ;
 use App\Http\Requests\UserStore;
 use Illuminate\Validation\Rule;
@@ -89,6 +90,15 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         $user = User::findOrFail($id);
+
+        $car = Car::where('user_id', $user->id)->first();
+
+        // Retirer l'association entre l'utilisateur et la voiture si elle existe
+        if ($car) {
+            $car->update(['user_id' => null]);
+            $car->save();
+        }
+
         $user->delete();
         return redirect()->route('user.index')->with('success', 'User deleted successfully !');
     }

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('modeles', function (Blueprint $table) {
             $table->increments('id')->startingValue(100);
             $table->string('nomModel');
-            $table->unsignedBigInteger('idBrand')->nullable();
-            $table->foreign('idBrand')->references('id')->on('brands');
+            $table->unsignedBigInteger('brand_id')->nullable();
+            $table->foreign('brand_id')->references('id')->on('brands');
             $table->string('engine');
             $table->timestamps();
 
