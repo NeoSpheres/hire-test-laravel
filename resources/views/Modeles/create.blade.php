@@ -22,8 +22,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="idBrand">idBrand:</label>
-                    <select id="idBrand" name="idBrand" class="form-control">
+                    <label for="brand_id">idBrand:</label>
+                    <select id="brand_id" name="brand_id" class="form-control">
                         @foreach($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
