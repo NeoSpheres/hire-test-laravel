@@ -10,8 +10,8 @@
             <form action="{{ route('cars.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="idBrand">Brand :</label>
-                    <select name="idBrand" id="idBrand" class="form-control">
+                    <label for="brand_id">Brand :</label>
+                    <select name="brand_id" id="brand_id" class="form-control">
                         <option value="">Choose a brand</option>
                         @foreach ($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
