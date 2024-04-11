@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserCreated;
-<<<<<<< HEAD
 use App\Models\Car;
-=======
->>>>>>> 123a6a7de7714489254e4a3587357f3e8b33b3ab
 use App\Models\User ;
 use App\Http\Requests\UserStore;
 use Illuminate\Validation\Rule;
@@ -18,8 +15,12 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $users = User::select(['id', 'name', 'email'])->get();
+            return datatables()->of($users)->toJson();
+        }
         $data = User::latest()->paginate(5);
         return view('users.showall', compact('data'))->with(request()->input('page'));
     }
@@ -41,7 +42,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-<<<<<<< HEAD
         // Valider les données du formulaire
         $request->validate([
             'name' => 'required|string',
@@ -61,18 +61,7 @@ class UserController extends Controller
 
 // Déclencher l'événement UserCreated
         event(new UserCreated($user));
-
-// Créer une voiture et l'associer à l'utilisateur
-        $car = new Car([
-            'model_id' => $request->model_id, // Assurez-vous que vous avez le model_id du modèle de voiture
-            'color' => $request->color,
-            'matricule' => $request->matricule,
-        ]);
-        $user->car()->save($car);
-
-// Rediriger l'utilisateur vers une page de confirmation ou une autre page
-        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès !');
-=======
+        return redirect()->route('user.index')->with('success', 'Utilisateur créé avec succès !');
         $input = $request-> validated();
         $input['password']= bcrypt($input['password']);
 
@@ -82,13 +71,7 @@ class UserController extends Controller
         event(new UserCreated($user));
 
         return redirect()->route('user.index')->with('success', 'User created successfully !');
->>>>>>> 123a6a7de7714489254e4a3587357f3e8b33b3ab
     }
-
-
-        /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $user = User::find($id);

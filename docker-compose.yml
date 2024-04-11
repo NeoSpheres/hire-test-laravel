@@ -1,67 +1,53 @@
-version: '3'
+version: "3.7"
+
+networks:
+    app-network:
+        driver: bridge
 
 services:
-    php-fpm:
+    app:
+        container_name: app
         build:
-            context: .  # Chemin du contexte de build
-            dockerfile: Dockerfile  # Chemin du Dockerfile
+            context: .
+            dockerfile: Dockerfile
+        image: php-laravel-7.0
+        restart: unless-stopped
+        tty: true
+        working_dir: /var/www
         volumes:
-            - ./:/var/www/html  # Utilisation du chemin absolu du répertoire racine du projet
+            - ./:/var/www
+        networks:
+            - app-network
+
+    db:
+        container_name: pgsql
+        build:
+            context: ./pgsql
+            dockerfile: Dockerfile
+        image: pgsql-docker
+        restart: unless-stopped
+        expose:
+            - "5432"
+        ports:
+            - "5433:5432"
+        volumes:
+            - ./script:/docker-entrypoint-initdb.d
+            - ./pgsql/data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD=Bakchlamo@@12345
+            - POSTGRES_USER=postgres
+            - POSTGRES_MULTIPLE_DATABASES=crud_app // you change this
+        networks:
+            - app-network
 
     nginx:
-        image: nginx:latest
-        ports:
-            - "14200:80"
-        volumes:
-            - ./nginx/config.d/default.conf:/etc/nginx/conf.d/default.conf
-            - ./:/var/www/html  # Utilisation du chemin absolu du répertoire racine du projet
-        depends_on:
-            - php-fpm
-
-#    postgresql:
-#        image: postgres:latest
-#        container_name: laravel_postgresql
-#        ports:
-#            - "14432:5432"
-#        environment:
-#            POSTGRES_USER: postgres
-#            POSTGRES_PASSWORD: arnoldetmaX2912
-#            POSTGRES_DB: Crud
-#        volumes:
-#            - postgresql_data:/var/lib/postgresql/data
-#        networks:
-#            - laravel-network
-
-        #postgres:
-        #container_name: postgres_hire
-        #image: "postgres:13.8-alpine"
-            #volumes:
-            #- pgsql_data:/var/lib/postgresql/data
-            #environment:
-            #POSTGRES_PASSWORD: secret
-            #POSTGRES_USER: core_user
-            #POSTGRES_DB: test_company_db
-            #POSTGRES_INITDB_ARGS: "--encoding=UTF8"
-        #restart: unless-stopped
-            #ports:
-            #- "14432:5432"
-    #volumes:
-    #pgsql_data:
-
-
-
-    postgres:
-        container_name: postgres_hire
-        image: "postgres:13.8-alpine"
-        volumes:
-            - pgsql_data:/var/lib/postgresql/data
-        environment:
-            POSTGRES_PASSWORD: arnoldetmaX29&
-            POSTGRES_USER: postgres
-            POSTGRES_DB: Crud
-            POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+        image: nginx:1.19.8-alpine
+        container_name: nginx
         restart: unless-stopped
+        tty: true
         ports:
-            - "14432:5432"
-volumes:
-    pgsql_data:
+            - 8100:80
+        volumes:
+            - ./nginx/conf:/etc/nginx/conf.d
+        networks:
+            - app-network
