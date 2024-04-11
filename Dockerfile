@@ -1,28 +1,62 @@
-FROM php:8.2-fpm
+FROM php:8.2.11-fpm
 
-&& apt-get install -y zip unzip git libpq-dev libzip-dev \
-    && docker-php-ext-install -j$(nproc) pdo pdo_mysql pdo_pgsql zip
 
-# Création du répertoire de travail
-WORKDIR /var/www/html
+# Install Composer
+RUN echo "Install COMPOSER"
+RUN cd /tmp \
+    && curl -sS https://getcomposer.org/installer -o composer-setup.php \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && rm composer-setup.php
 
-# Copier tout le projet dans le conteneur
-COPY . /var/www/html/
 
-# Installation de Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install required PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql
 
-# Installation des dépendances du projet Laravel
-RUN composer install
 
-# Configuration des permissions pour l'utilisateur Apache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage
+# Update package manager and install useful tools
+RUN apt-get update && apt-get -y install apt-utils nano wget dialog vim
 
-# Exposer le port Apache
-EXPOSE 80
 
-# Commande par défaut pour démarrer le service PHP-FPM
+# Install important libraries
+RUN echo "Install important libraries"
+RUN apt-get -y install --fix-missing \
+    apt-utils \
+    build-essential \
+    git \
+    curl \
+    libcurl4 \
+    libcurl4-openssl-dev \
+    zlib1g-dev \
+    libzip-dev \
+    zip \
+    libbz2-dev \
+    locales \
+    libmcrypt-dev \
+    libicu-dev \
+    libonig-dev \
+    libxml2-dev
+
+
+# Install Postgres PDO (adjust for Windows if needed)
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
+
+
+# Clean up
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+
+# Add any additional configurations or adjustments as needed
+
+
+# Set the working directory
+WORKDIR /var/www
+
+
+# Expose the port
+EXPOSE 9000
+
+
+# Define the entry point
 CMD ["php-fpm"]
-
-
