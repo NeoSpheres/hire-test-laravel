@@ -9,15 +9,12 @@ Mini backoffice to test applicants tech level with Laravel
 * Composer
 
 # Installation:
-* 
-* Installation PHP
-* Installation de Composer
 * Configuration de l'environnement .env :
 
 /*
 APP_NAME=Laravel
 APP_ENV=local
-APP_KEY=base64:DXhZ7khKE26ku5gRjpsCQ4ElhDhTP71BeGfZERpHGA0=
+APP_KEY=base64:W4mZzrNo/c/JRSMbsXv1qxEDzipFN61SVm5SlRI00GA=
 APP_DEBUG=true
 APP_TIMEZONE=UTC
 APP_URL=http://localhost
@@ -37,11 +34,11 @@ LOG_DEPRECATIONS_CHANNEL=null
 LOG_LEVEL=debug
 
 DB_CONNECTION=pgsql
-DB_HOST=127.0.0.1
-DB_PORT=14432
-DB_DATABASE=test1
-DB_USERNAME=postgres
-DB_PASSWORD=Bakchlamo@@12345
+DB_HOST=host.docker.internal
+DB_PORT=5432
+DB_DATABASE={database name}
+DB_USERNAME={database username}
+DB_PASSWORD={password}
 
 SESSION_DRIVER=database
 SESSION_LIFETIME=120
@@ -81,11 +78,14 @@ AWS_USE_PATH_STYLE_ENDPOINT=false
 VITE_APP_NAME="${APP_NAME}"
 */
 
-* Configurer la base de données : Dans le fichier .env, configurez les détails de connexion de la base de données.
+* Configurer la base de données : Dans le fichier .env et docker-compose.yml, configurez les détails de connexion de la base de données.
 * Migration de la base de données : php artisan migrate
   
 # Démarrage:
-* Lancement du serveur de développement : php artisan serve
+* docker-compose build
+* docker-compose up -d
+
+A vous de jouer 😊
 
 # Fabriqué avec: 
 PHP Laravel
