@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('model_id');
-            $table->foreign('model_id')->references('id')->on('modeles');
+            $table->foreign('model_id')->references('id')->on('modeles')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('color');

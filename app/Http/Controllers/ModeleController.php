@@ -28,8 +28,7 @@ class ModeleController extends Controller
     public function create()
     {
         $brands=Brand::all();
-        $matricule = generateMatricule();
-        return view('Modeles.create',compact('brands','matricule'));
+        return view('Modeles.create',compact('brands'));
     }
 
     /**
@@ -103,20 +102,50 @@ class ModeleController extends Controller
 
         if ($cars) {
             foreach ($cars as $car) {
+                if ($car->user) {
+                    $availableCar = Car::whereNull('user_id')->first();
+                    if ($availableCar) {
+                        $availableCar->user_id = $car->user->id;
+                    } else {
+                        // Récupérer un modèle aléatoire qui n'a pas l'ID spécifique de $model->id
+                        $randomModel = Modele::whereNotIn('id', [$model->id])->inRandomOrder()->first();
+                        if (!$randomModel) {
+                            $brand = Brand::where('name', 'Ford')->first();
+                            if (!$brand) {
+                                $newBrand = Brand::query()->create([
+                                    'name' => 'Ford',
+                                    'country' => 'US',
+                                ]);
+                                $newBrand->save();
 
-                // Associer à l'utilisateur de la voiture une autre voiture
-                $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
-                $car->model_id = $randomModel->id;
-                $availableCar = Car::query()->create([
-                    'model_id' => $randomModel->id,
-                    'user_id' => $car->user->id,
-                    'color' => $car->color,
-                    'matricule' => $car->matricule,
-                ]);
-                $availableCar->save();
+                                $randomModel = Modele::query()->create([
+                                    'nomModel' => 'Ranger',
+                                    'brand_id' => $newBrand->id,
+                                    'engine' => 'Hybrid',
+                                ]);
+                            } else {
+                                $randomModel = Modele::query()->create([
+                                    'nomModel' => $brand->name,
+                                    'brand_id' => $brand->id,
+                                    'engine' => 'Hybrid',
+                                ]);
+                            }
+
+                            $randomModel->save();
+                        }
+
+                        $availableCar = Car::query()->create([
+                            'model_id' => $randomModel->id,
+                            'user_id' => $car->user->id,
+                            'color' => $car->color,
+                            'matricule' => $car->matricule,
+                        ]);
+                    }
+                    $availableCar->save();
+                }
 
                 // Supprimer la voiture ayant ce modèle
-                $car->delete();
+                //$car->delete();
             }
         }
 

@@ -92,6 +92,25 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
+        // Vérifier si un utilisateur est associé à la voiture
+        if ($car->user) {
+            $availableCar = Car::whereNull('user_id')->first();
+
+            if ($availableCar) {
+                $availableCar->user_id = $car->user->id;
+            } else {
+                $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
+
+                $availableCar = Car::query()->create([
+                    'model_id' => $randomModel->id,
+                    'user_id' => $car->user->id,
+                    'color' => $car->color,
+                    'matricule' => generateMatricule(),
+                ]);
+            }
+            $availableCar->save();
+        }
+
         $car->delete();
         return redirect()->route('cars.index')->with('success', 'Car deleted successfully !');
     }

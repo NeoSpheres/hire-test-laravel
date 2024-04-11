@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id')->startingValue(100);
             $table->string('nomModel');
             $table->unsignedBigInteger('brand_id')->nullable();
-            $table->foreign('brand_id')->references('id')->on('brands');
+            $table->foreign('brand_id')->references('id')->on('brands')->onDelete('cascade');
             $table->string('engine');
             $table->timestamps();
 
