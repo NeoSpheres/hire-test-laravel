@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Str;
 
+include_once app_path().'/Helpers/MatriculeHelper.php';
+
 class UserCreatedListener
 {
     /**
