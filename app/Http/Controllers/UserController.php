@@ -7,6 +7,7 @@ use App\Models\Car;
 use App\Models\User ;
 use App\Http\Requests\UserStore;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
 
 
 class UserController extends Controller
@@ -14,8 +15,12 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $users = User::select(['id', 'name', 'email'])->get();
+            return datatables()->of($users)->toJson();
+        }
         $data = User::latest()->paginate(5);
         return view('users.showall', compact('data'))->with(request()->input('page'));
     }
@@ -34,8 +39,29 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserStore $request)
+
+    public function store(Request $request)
     {
+        // Valider les données du formulaire
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:8', // Exemple de règle de validation pour le mot de passe
+            // Ajoutez d'autres règles de validation pour les autres champs
+        ]);
+
+        // Récupérer les données du formulaire
+        $input = $request->all();
+
+// Crypter le mot de passe avec bcrypt
+        $input['password'] = bcrypt($input['password']);
+
+// Créer un nouvel utilisateur
+        $user = User::create($input);
+
+// Déclencher l'événement UserCreated
+        event(new UserCreated($user));
+        return redirect()->route('user.index')->with('success', 'Utilisateur créé avec succès !');
         $input = $request-> validated();
         $input['password']= bcrypt($input['password']);
 
@@ -46,10 +72,6 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->with('success', 'User created successfully !');
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $user = User::find($id);

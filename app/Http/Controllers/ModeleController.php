@@ -6,6 +6,7 @@ use App\Http\Requests\ModeleStore;
 use App\Models\Brand;
 use App\Models\Car;
 use App\Models\Modele;
+use App\Models\User;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\AssignOp\Mod;
 

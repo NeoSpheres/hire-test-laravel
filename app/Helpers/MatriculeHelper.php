@@ -14,4 +14,10 @@ function generateMatricule(): string
     return $matricule;
 }
 
+function generateRandomColor() {
+    $colors = array('red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown', 'cyan', 'magenta');
+    $randomIndex = array_rand($colors);
+    return $colors[$randomIndex];
+}
+
 

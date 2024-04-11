@@ -4,6 +4,12 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Car;
+use App\Models\Brand;
+use App\Models\Modele;
+use App\Events\UserCreated;
+
 
 class SeedUsers extends Command
 {
@@ -15,7 +21,7 @@ class SeedUsers extends Command
     {
         $this->info('Creating users...');
 
-        $initialUsersCount = User::count();
+      /*  $initialUsersCount = User::count();
 
         $usersToReach = $this->argument('count') ?? 10;
 
@@ -35,6 +41,17 @@ class SeedUsers extends Command
         }
 
         $this->info('Users created successfully!');
-    }
+      */
+        $count = $this->argument('count');
 
+        for ($i = 0; $i < $count; $i++) {
+            // Créer un utilisateur
+            $user = User::factory()->create([
+                'password' => Hash::make('password'), // Changez 'password' en mot de passe souhaité
+            ]);
+            event(new UserCreated($user));
+        }
+
+        $this->info("$count users created successfully!");
+    }
 }
