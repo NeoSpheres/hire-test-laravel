@@ -1,23 +1,28 @@
 FROM php:8.2-fpm
 
-RUN apt-get update \
-  && apt-get install -y \
-  git \
-  curl \
-  libpng-dev \
-  libonig-dev \
-  libxml2-dev \
-  zip \
-  unzip \
-  zlib1g-dev \
-  libpq-dev \
-  libzip-dev
+&& apt-get install -y zip unzip git libpq-dev libzip-dev \
+    && docker-php-ext-install -j$(nproc) pdo pdo_mysql pdo_pgsql zip
 
-RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-  && docker-php-ext-install pdo pdo_pgsql pgsql zip bcmath gd
+# Création du répertoire de travail
+WORKDIR /var/www/html
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Copier tout le projet dans le conteneur
+COPY . /var/www/html/
 
-EXPOSE 9000
+# Installation de Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Installation des dépendances du projet Laravel
+RUN composer install
+
+# Configuration des permissions pour l'utilisateur Apache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage
+
+# Exposer le port Apache
+EXPOSE 80
+
+# Commande par défaut pour démarrer le service PHP-FPM
+CMD ["php-fpm"]
 
 

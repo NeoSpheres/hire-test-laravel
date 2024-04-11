@@ -32,6 +32,9 @@
             <ul>
                 <li><a href="{{ url('/') }}">Accueil</a></li>
                 <li><a href="{{ url('/user') }}">Utilisateurs</a></li>
+                <li><a href="{{ url('/cars') }}">Voitures</a></li>
+                <li><a href="{{ url('/model') }}">Modéles</a></li>
+                <li><a href="{{ url('/brands') }}">Marques</a></li>
                 <li><a href="{{ url('/setting') }}">Réglages</a></li>
             </ul>
         </div>
