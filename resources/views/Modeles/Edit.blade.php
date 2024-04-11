@@ -12,7 +12,7 @@
                 @method('PATCH')
                 <div class="form-group">
                     <label>Brand</label>
-                    <select name="idBrand" id="idBrand" class="form-control" >
+                    <select name="brand_id" id="brand_id" class="form-control" >
                         @foreach ($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
@@ -49,7 +49,7 @@
     <script>
         // Attach an event listener to the brand select element
         // Attach an event listener to the brand select element
-        document.getElementById('idBrand').addEventListener('change', function() {
+        document.getElementById('brand_id').addEventListener('change', function() {
             var brandId = this.value;
 
             // Send an AJAX request to get the models associated with the selected brand

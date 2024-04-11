@@ -86,4 +86,37 @@ class UserCreatedListener
     }
 }*/
 
+        // Récupérer les voitures disponibles et choisir la première
+        $availableCar = Car::query()->whereNull('user_id')->first();
+
+        if ($availableCar) {
+            // Associer à l'utilisateur la voiture trouvée
+            $availableCar->user_id = $user->id;
+        } else {
+            $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
+
+            $availableCar = Car::query()->create([
+                'model_id' => $randomModel->id,
+                'user_id' => $user->id,
+                'color' => 'black', // Par défaut
+                'matricule' => generateMatricule(),
+            ]);
+
+            /* Sinon, créer une nouvelle voiture
+            $brand = Brand::query()->firstOrCreate([
+                'name' => 'NomDeLaMarque',
+                'country' => 'Pays'
+            ]);
+
+            $model = Modele::query()->firstOrCreate([
+                'nomModel' => 'NomDuModele',
+                'idBrand' => $brand->id,
+                'engine' => 'TypeDuMoteur'
+            ]);*/
+        }
+        $availableCar->save();
+
+        return $availableCar;
+
+
 

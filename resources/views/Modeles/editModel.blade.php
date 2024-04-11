@@ -19,19 +19,24 @@
                 </div>
                 <div class="form-group">
                     <label>Brand</label>
-                    <input type="text" name="idBrand" class="form-control" value="{{ $model->idBrand }}" disabled>
-                    <input type="hidden" name="idBrand" class="form-control" value="{{ $model->idBrand }}">
-                    @error('idBrand')
+                    <input type="text" name="brand_id" class="form-control" value="{{ $model->brand_id }}" disabled>
+                    <input type="hidden" name="brand_id" class="form-control" value="{{ $model->brand_id }}">
+                    @error('brand_id')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label>Engine</label>
                     <select id="engine" name="engine" class="form-control">
+                        @foreach(['Hybrid', 'Electric', 'Petrol'] as $type)
+                            <option value="{{ $type }}" {{ $model->engine == $type ? 'selected' : '' }}>{{ $type }}</option>
+                        @endforeach
+                    </select>
+                    {{--<select id="engine" name="engine" class="form-control">
                         <option value="Hybrid" {{ $model->engine == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
                         <option value="Electric" {{ $model->engine == 'Electric' ? 'selected' : '' }}>Electric</option>
                         <option value="Petrol" {{ $model->engine == 'Petrol' ? 'selected' : '' }}>Petrol</option>
-                    </select>
+                    </select>--}}
                 </div>
                 <div class="d-flex justify-content-between">
                     <a class="btn btn-secondary" href="{{ route('model.index') }}">Back</a>

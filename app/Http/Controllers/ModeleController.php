@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ModeleStore;
 use App\Models\Brand;
+use App\Models\Car;
 use App\Models\Modele;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -98,6 +99,27 @@ class ModeleController extends Controller
      */
     public function destroy(Modele $model)
     {
+        $cars = Car::where('model_id', $model->id)->get();
+
+        if ($cars) {
+            foreach ($cars as $car) {
+
+                // Associer à l'utilisateur de la voiture une autre voiture
+                $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
+                $car->model_id = $randomModel->id;
+                $availableCar = Car::query()->create([
+                    'model_id' => $randomModel->id,
+                    'user_id' => $car->user->id,
+                    'color' => $car->color,
+                    'matricule' => $car->matricule,
+                ]);
+                $availableCar->save();
+
+                // Supprimer la voiture ayant ce modèle
+                $car->delete();
+            }
+        }
+
         $model->delete();
         return redirect()->route('model.index')->with('success', 'Modèle supprimé avec succès.');
 
