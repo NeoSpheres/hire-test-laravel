@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCreated;
 use App\Models\User ;
 use App\Http\Requests\UserStore;
 use Illuminate\Validation\Rule;
@@ -23,7 +24,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $user = new User();
+        $availableCar = event(new UserCreated($user));
+
+        return view('users.create', compact('availableCar'));
     }
 
     /**
@@ -33,7 +37,12 @@ class UserController extends Controller
     {
         $input = $request-> validated();
         $input['password']= bcrypt($input['password']);
-        User::create($input);
+
+        $user = User::create($input);
+
+        // Déclencher l'événement UserCreated pour créer une voiture associée
+        event(new UserCreated($user));
+
         return redirect()->route('user.index')->with('success', 'User created successfully !');
     }
 

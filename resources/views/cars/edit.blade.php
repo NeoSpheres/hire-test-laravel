@@ -12,12 +12,12 @@
                 @method('PATCH')
                 <div class="form-group">
                     <label>Brand</label>
-                    <select name="idBrand" id="idBrand" class="form-control">
+                    <select name="brand_id" id="brand_id" class="form-control">
                         @foreach ($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
                     </select>
-                    @error('idBrand')
+                    @error('brand_id')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
@@ -65,7 +65,7 @@
     </div>
 
     <script>
-        document.getElementById('idBrand').addEventListener('change', function() {
+        document.getElementById('brand_id').addEventListener('change', function() {
             var brandId = this.value;
             console.log(brandId);
             var modelSelect = document.getElementById('model_id');
@@ -74,7 +74,7 @@
 
             // Filtrer les modèles en fonction de la marque sélectionnée
             @foreach($models as $model)
-            if ({{ $model->idBrand }} == brandId) {
+            if ({{ $model->brand_id }} == brandId) {
                 var option = document.createElement('option');
                 option.value = '{{ $model->id }}';
                 option.textContent = '{{ $model->nomModel }}';
@@ -82,7 +82,7 @@
             }
             @endforeach
 
-            /*let models = @json($models);
+            {{--let models = @json($models);
             models.forEach(function(model) {
                 if (model.idBrand == brandId) {
                     var option = document.createElement('option');
@@ -90,7 +90,7 @@
                     option.textContent = model.nomModel;
                     modelSelect.appendChild(option);
                 }
-            });*/
+            });--}}
 
             modelSelect.disabled = false;
         });

@@ -2,6 +2,19 @@
 
 @section('content')
 
+    <div>
+        <ul>
+            @foreach ($availableCar as $car)
+                <li>
+                    <strong>User:</strong> {{ $car['user_id'] }} <br>
+                    <strong>Model:</strong> {{ $car['model_id'] }} <br>
+                    <strong>Color:</strong> {{ $car['color'] }} <br>
+                    <strong>Matricule:</strong> {{ $car['matricule'] }} <br>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+
     <div class="card">
         <div class="card-header">
             <h2> User Create</h2>
