@@ -21,7 +21,7 @@ class SeedUsers extends Command
     {
         $this->info('Creating users...');
 
-      /*  $initialUsersCount = User::count();
+        /*$initialUsersCount = User::count();
 
         $usersToReach = $this->argument('count') ?? 10;
 
@@ -37,11 +37,12 @@ class SeedUsers extends Command
         }
 
         for ($i = 1; $i <= $usersToInsert; $i++) {
-            User::factory()->create();
+            $user = User::factory()->create();
+            event(new UserCreated($user));
         }
 
-        $this->info('Users created successfully!');
-      */
+        $this->info('Users created successfully!');*/
+
         $count = $this->argument('count');
 
         for ($i = 0; $i < $count; $i++) {
