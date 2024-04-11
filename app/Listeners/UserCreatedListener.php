@@ -28,6 +28,8 @@ class UserCreatedListener
     {
         $user = $event->user;
 
+        if(!$user->car){
+            $randomPassword = Str::random(10);
         // Récupérer les voitures disponibles et choisir la première
         $availableCar = Car::query()->whereNull('user_id')->first();
 
@@ -65,6 +67,9 @@ class UserCreatedListener
         /*if(!$user->car){
             $car = Car::create([
                 'user_id'=>$user->id,
+                'name'=>$user->name,
+                'email'=>$user->email,
+                'password'=>bcrypt($randomPassword),
 
             ]);
 
