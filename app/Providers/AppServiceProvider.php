@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Listeners\UserCreatedListener;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Setting;
@@ -27,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Event::listen(UserCreatedListener::class);
+
         Paginator::useBootstrap();
 
         View::composer('*', function ($view) {
