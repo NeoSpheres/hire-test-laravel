@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCreated;
+use App\Models\Car;
 use App\Models\User ;
 use App\Http\Requests\UserStore;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
 
 
 class UserController extends Controller
@@ -29,15 +32,43 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserStore $request)
+
+    public function store(Request $request)
     {
-        $input = $request-> validated();
-        $input['password']= bcrypt($input['password']);
-        User::create($input);
-        return redirect()->route('user.index')->with('success', 'User created successfully !');
+        // Valider les données du formulaire
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:8', // Exemple de règle de validation pour le mot de passe
+            // Ajoutez d'autres règles de validation pour les autres champs
+        ]);
+
+        // Récupérer les données du formulaire
+        $input = $request->all();
+
+// Crypter le mot de passe avec bcrypt
+        $input['password'] = bcrypt($input['password']);
+
+// Créer un nouvel utilisateur
+        $user = User::create($input);
+
+// Déclencher l'événement UserCreated
+        event(new UserCreated($user));
+
+// Créer une voiture et l'associer à l'utilisateur
+        $car = new Car([
+            'model_id' => $request->model_id, // Assurez-vous que vous avez le model_id du modèle de voiture
+            'color' => $request->color,
+            'matricule' => $request->matricule,
+        ]);
+        $user->car()->save($car);
+
+// Rediriger l'utilisateur vers une page de confirmation ou une autre page
+        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès !');
     }
 
-    /**
+
+        /**
      * Display the specified resource.
      */
     public function show(string $id)

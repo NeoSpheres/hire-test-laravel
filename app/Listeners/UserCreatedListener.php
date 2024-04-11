@@ -23,46 +23,54 @@ class UserCreatedListener
      */
     public function handle(UserCreated $event): void
     {
+
+
+        /*
+                if (!$user->car) {
+
+                    // Récupérer les voitures disponibles et choisir la première
+                    $availableCar = Car::whereNull('user_id')->first();
+
+                    if ($availableCar) {
+                        // Associer à l'utilisateur la voiture trouvée
+                        $availableCar->user_id = $user->id;
+                        $availableCar->save();
+                    } else {
+                        // Sinon, créer une nouvelle voiture
+                        $brand = Brand::create([
+                            'name' => '',
+                            'country' => ''
+                        ]);
+
+                        $model =
+
+                        $car = Car::create([
+                            'brand_id' => $brand->id,
+                            //'model_id' => $model->id,
+                            'user_id' => $user->id,
+                            'color' => 'black', // Par défaut
+                            'matricule' => generateMatricule(),
+                        ]);
+                    }*/
+
+
         $user = $event->user;
 
-        if(!$user->car){
-            $randomPassword = Str::random(10);
-        // Récupérer les voitures disponibles et choisir la première
-        $availableCar = Car::whereNull('user_id')->first();
+// Vérifiez si une voiture est disponible pour l'affectation
+        $availableCar = Car::whereNull('user_id')->inRandomOrder()->first();
 
         if ($availableCar) {
-            // Associer à l'utilisateur la voiture trouvée
-            $availableCar->user_id = $user->id;
+            // Si une voiture est disponible, associez-la à l'utilisateur
+            $availableCar->user()->associate($user);
             $availableCar->save();
         } else {
-            // Sinon, créer une nouvelle voiture
-            $brand = Brand::create([
-                'name' => '',
-                'country' => ''
+            // Si aucune voiture n'est disponible, créez une nouvelle voiture avec un modèle par défaut
+            $car = new Car([
+                'id' => 1, // Remplacez par l'ID du modèle de voiture par défaut
+                'color' => 'blue', // Couleur de la voiture par défaut
+                'matricule' => 'YB-276-IH', // Plaque d'immatriculation de la voiture par défaut
             ]);
-
-            $model =
-
-            $car = Car::create([
-                'brand_id' => $brand->id,
-                //'model_id' => $model->id,
-                'user_id' => $user->id,
-                'color' => 'black', // Par défaut
-                'matricule' => generateMatricule(),
-            ]);
+            $user->car()->save($car);
         }
-
-        /*if(!$user->car){
-            $car = Car::create([
-                'user_id'=>$user->id,
-                'name'=>$user->name,
-                'email'=>$user->email,
-                'password'=>bcrypt($randomPassword),
-
-            ]);
-
-            $user->car()->associate($car);
-            $user->save();
-        }*/
     }
 }

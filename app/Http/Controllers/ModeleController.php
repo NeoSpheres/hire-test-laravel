@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ModeleStore;
 use App\Models\Brand;
 use App\Models\Modele;
+use App\Models\User;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\AssignOp\Mod;
 
@@ -36,14 +37,14 @@ class ModeleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'nomModel' => 'required|string',
-        'idBrand' => 'required',
-        'engine' => 'required|in:Petrol,Hybrid,Electric',
-    ]);
+            'nomModel' => 'required|string',
+            'brand_id' => 'required',
+            'engine' => 'required|in:Petrol,Hybrid,Electric',
+        ]);
 
         Modele::create([
             'nomModel' => $request->nomModel,
-            'idBrand' => $request->idBrand,
+            'brand_id' => $request->brand_id,
             'engine' => $request->engine,
         ]);
 
@@ -78,7 +79,7 @@ class ModeleController extends Controller
         // Validation des données
         $validatedData = $request->validate([
             'nomModel' => 'required|string',
-            'idBrand' => 'required',
+            'brand_id' => 'required',
             'engine' => 'required|in:Petrol,Hybrid,Electric',
         ]);
 
@@ -105,7 +106,7 @@ class ModeleController extends Controller
     public function getModelsByBrand($brandId)
     {
         // Récupérer les modèles associés à la marque spécifiée
-        $models = Modele::where('idBrand', $brandId)->get();
+        $models = Modele::where('brand_id', $brandId)->get();
 
         // Retourner les modèles au format JSON
         return response()->json($models);

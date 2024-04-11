@@ -11,12 +11,12 @@ class Modele extends Model
 
     protected $fillable = [
         'nomModel',
-        'idBrand',
+        'brand_id',
         'engine'
     ];
 
     public function Brand(){
-        return $this->belongsTo(Brand::class,'idBrand');
+        return $this->belongsTo(Brand::class,'brand_id');
     }
     public function Car(){
         return $this->hasMany(Car::class,'id');

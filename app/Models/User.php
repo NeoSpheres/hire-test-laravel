@@ -43,4 +43,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function car()
+    {
+        return $this->hasOne(Car::class); // Assurez-vous que Car est correctement importé
+    }
 }
