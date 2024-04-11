@@ -1,53 +1,58 @@
-version: "3.7"
+version: '3.8'
 
-networks:
-    app-network:
-        driver: bridge
 
 services:
+    # Application Service
     app:
-        container_name: app
+        container_name: laravel
         build:
             context: .
             dockerfile: Dockerfile
-        image: php-laravel-7.0
-        restart: unless-stopped
-        tty: true
-        working_dir: /var/www
         volumes:
             - ./:/var/www
-        networks:
-            - app-network
+        ports:
+            - "9000:9000"
+        working_dir: /var/www
+        depends_on:
+            - db
 
+
+    # Database Service
     db:
-        container_name: pgsql
-        build:
-            context: ./pgsql
-            dockerfile: Dockerfile
-        image: pgsql-docker
-        restart: unless-stopped
-        expose:
-            - "5432"
-        ports:
-            - "5433:5432"
+        image: postgres:16.0
+        container_name: postgres
         volumes:
-            - ./script:/docker-entrypoint-initdb.d
-            - ./pgsql/data:/var/lib/postgresql/data
+            - ./postgresql/data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
         environment:
-            - POSTGRES_PASSWORD=Bakchlamo@@12345
-            - POSTGRES_USER=postgres
-            - POSTGRES_MULTIPLE_DATABASES=crud_app // you change this
-        networks:
-            - app-network
+            POSTGRES_DB: crud_app
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: Bakchlamo@@12345
 
+
+    # Web Server Service
     nginx:
-        image: nginx:1.19.8-alpine
+        image: nginx:alpine
         container_name: nginx
-        restart: unless-stopped
-        tty: true
         ports:
-            - 8100:80
+            - "14200:80"
         volumes:
-            - ./nginx/conf:/etc/nginx/conf.d
-        networks:
-            - app-network
+            - ./:/var/www
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
+        depends_on:
+            - app
+            - db
+
+
+    # pgAdmin Service
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: pgAdmin
+        ports:
+            - "5050:80"
+        depends_on:
+            - db
+        environment:
+            PGADMIN_DEFAULT_EMAIL: prasunamudawari@gmail.com
+            PGADMIN_DEFAULT_PASSWORD: password
