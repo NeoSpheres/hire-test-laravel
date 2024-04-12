@@ -3,7 +3,6 @@
 Mini backoffice to test applicants tech level with Laravel
 
 # Pré-requis:
-* 
 * Editeur : exp: PHPSTORM
 * PHP
 * Composer
