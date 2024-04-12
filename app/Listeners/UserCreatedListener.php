@@ -40,6 +40,23 @@ class UserCreatedListener
             $availableCar->user_id = $user->id;
         } else {
             $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
+            if(!$randomModel){
+                $randomBrand = Brand::query()->inRandomOrder()->first();
+                if(!$randomBrand){
+                    $randBrand = Brand::query()->create([
+                        'name' => 'Ford',
+                        'country' => 'US',
+                    ]);
+                    $randBrand->save();
+
+                    $randomModel = Modele::query()->create([
+                        'nomModel' => 'Ranger',
+                        'brand_id' => $randBrand->id,
+                        'engine' => 'Hybrid',
+                    ]);
+                    $randomModel->save();
+                }
+            }
 
             $availableCar = Car::query()->create([
                 'model_id' => $randomModel->id,
@@ -49,7 +66,7 @@ class UserCreatedListener
             ]);
         }
 
-        $availableCar->save();
+        //$availableCar->save();
 
         return $availableCar;
 

@@ -108,9 +108,9 @@ class ModeleController extends Controller
                         $availableCar->user_id = $car->user->id;
                     } else {
                         // Récupérer un modèle aléatoire qui n'a pas l'ID spécifique de $model->id
-                        $randomModel = Modele::whereNotIn('id', [$model->id])->inRandomOrder()->first();
+                        $randomModel = Modele::query()->whereNotIn('id', [$model->id])->inRandomOrder()->first();
                         if (!$randomModel) {
-                            $brand = Brand::where('name', 'Ford')->first();
+                            $brand = Brand::query()->where('name', 'Ford')->first();
                             if (!$brand) {
                                 $newBrand = Brand::query()->create([
                                     'name' => 'Ford',
@@ -123,15 +123,17 @@ class ModeleController extends Controller
                                     'brand_id' => $newBrand->id,
                                     'engine' => 'Hybrid',
                                 ]);
+                                $randomModel->save();
+
                             } else {
                                 $randomModel = Modele::query()->create([
                                     'nomModel' => $brand->name,
                                     'brand_id' => $brand->id,
                                     'engine' => 'Hybrid',
                                 ]);
+                                $randomModel->save();
                             }
 
-                            $randomModel->save();
                         }
 
                         $availableCar = Car::query()->create([
