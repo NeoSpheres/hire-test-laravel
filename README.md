@@ -85,6 +85,14 @@ VITE_APP_NAME="${APP_NAME}"
 * docker-compose build
 * docker-compose up -d
 
+# Migrations database 
+* php artisan migrate --path=/database/migrations/2024_04_09_101925_create_brands_table.php   
+* php artisan migrate --path=/database/migrations/2024_04_09_104142_create_modeles_table.php
+* php artisan migrate --path=/database/migrations/0001_01_01_000000_create_users_table.php 
+* php artisan migrate --path=/database/migrations/2024_04_09_092457_create_cars_table.php 
+* php artisan migrate --path=/database/migrations/2024_04_07_001008_create_settings_table.php
+
+
 A vous de jouer 😊
 
 # Fabriqué avec: 
