@@ -2,57 +2,62 @@
 
 namespace Tests\Feature;
 
+use App\Events\UserCreated;
+use App\Models\Brand;
+use App\Models\Car;
+use App\Models\Modele;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
+
     /**
      * A basic feature test example.
      */
 
-    /*public function test_user_creation()
-    {
-        // Créer un utilisateur via le CRUD
-        $user = User::factory()->create();
-
-        // Vérifier si l'utilisateur a une voiture associée
-        $this->assertNotNull($user->car);
-    }*/
-
     public function test_if_user_is_created(): void
     {
-        //$response = $this->get('/user');
-        $userArray =[
+        // Créer un utilisateur
+        $user = User::factory()->create([
             'name' => 'user_test1',
             'email' => 'user_test1@test.fr',
             'password' => '12345678'
-        ];
-        //dd($userArray);
+        ]);
+        event(new UserCreated($user));
 
-        // Send a POST request to create the new player
-        $response = $this->post('/user', $userArray);
-        //dd($response);
 
-        $response->assertStatus(302);
-        $this->assertDatabaseHas('users', ['email' => 'user_test1@test.fr']);
+        // Vérifier que l'utilisateur a été créé avec succès
+        $this->assertNotNull($user);
+
+        // Vérifier qu'une voiture est associée à l'utilisateur
+        $car = Car::query()->where('user_id', $user->id)->first();
+        $this->assertNotNull($car);
     }
 
-    /*public function test_if_user_is_deleted(): void
+    public function test_if_10_user_is_created(): void
     {
-        $userArray =[
-            'name' => 'user_test1',
-            'email' => 'user_test1@test.fr',
-            'password' => '12345678'
-        ];
-        //dd($userArray);
+        // Créer 10 utilisateurs avec des voitures associées
+        User::factory()->count(10)->create()->each(function ($user) {
+            event(new UserCreated($user));
 
+            // Vérifier que l'utilisateur a été créé avec succès
+            $this->assertNotNull($user);
+        });
 
-        $response->assertStatus(200);
-    }*/
+        // Vérifier que chaque utilisateur a une voiture associée
+        $users = User::all();
+        foreach ($users as $user) {
+            $car = Car::query()->where('user_id', $user->id)->first();
+            $this->assertNotNull($car);
+        }
+
+    }
 
 
 }
