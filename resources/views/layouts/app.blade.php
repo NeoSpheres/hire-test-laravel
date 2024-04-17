@@ -15,6 +15,16 @@
 
 
     {{-- Sweet alert css --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous"
+    />
+
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -27,6 +37,18 @@
             content: none !important;
         }
     </style>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css">
+    <!-- Ajax Jquery-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- DataTables-->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css">
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+
     @yield('head')
     <title>@yield('title', 'Crud app')</title>
 </head>
@@ -54,6 +76,8 @@
                 <li><a href="{{ url('/brands') }}">Marques</a></li>
                 <li><a href="{{ url('/setting') }}">Réglages</a></li>
                 <li><a href="{{ url('/datatable-cars') }}">datatable-cars</a></li>
+                <li><a href="{{ url('/ajax-brands') }}">Marques (ajax)</a></li>
+                <li><a href="{{ url('/ajax-models') }}">Modéles (ajax)</a></li>
             </ul>
         </div>
 
