@@ -4,15 +4,15 @@
 
     <div class="card">
         <div class="card-header">
-            <h2> Create a car</h2>
+            <h2>Edit car</h2>
         </div>
         <div class="card-body">
-            <form action="{{ route('cars.store') }}" method="POST">
+            <form action="{{ route('datatable-cars.update', ['datatable_car' => $item->id]) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="form-group">
-                    <label for="brand_id">Brand :</label>
+                    <label>Brand</label>
                     <select name="brand_id" id="brand_id" class="form-control">
-                        <option value="$brand->id">Choose a brand</option>
                         @foreach ($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
@@ -22,43 +22,42 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="model_id">Model :</label>
-                    <select name="model_id" id="model_id"  disabled class="form-control">
+                    <label>Model</label>
+                    <select name="model_id" id="model_id" class="form-control" disabled>
+                        <option value="{{$car->modele->id}}">{{$car->modele->nomModel}}</option>
                     </select>
                     @error('model_id')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="user_id">Owner :</label>
-                    <select name="user_id" id="user_id" class="form-control">
-                        <option value=""></option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('user_id')
+                    <label>Registration</label>
+                    <input type="text" name="matricule" class="form-control" value="{{$car->matricule}}" disabled>
+                    @error('matricule')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label>Color</label>
-                    <input type="text" name="color" class="form-control">
+                    <input type="text" name="color" class="form-control" value="{{$car->color}}">
                     @error('color')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label for="matricule">Registration</label>
-                    <input type="text" name="matricule" class="form-control" value="{{ $matricule }}" readonly disabled>
-                    <input type="hidden" name="matricule_hidden" value="{{ $matricule }}">
-                    @error('matricule')
+                {{--<div class="form-group">
+                    <label>Type</label>
+                    <select id="engine" name="engine" class="form-control">
+                        @foreach(['Hybrid', 'Electric', 'Petrol'] as $type)
+                            <option value="{{ $type }}" {{ $car->modele->engine == $type ? 'selected' : '' }}>{{ $type }}</option>
+                        @endforeach
+                    </select>
+                    @error('engine')
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
-                </div>
+                </div>--}}
                 <div class="d-flex justify-content-between">
                     <a class="btn btn-secondary" href="{{route('cars.index')}}">Back</a>
-                    <button type="submit" class="btn btn-primary m1-auto">Create</button>
+                    <button type="submit" class="btn btn-primary m1-auto">Update</button>
                 </div>
             </form>
         </div>
@@ -82,10 +81,19 @@
                 modelSelect.appendChild(option);
             }
             @endforeach
-            modelSelect.disabled = false;
+
+                {{--let models = @json($models);
+                models.forEach(function(model) {
+                    if (model.idBrand == brandId) {
+                        var option = document.createElement('option');
+                        option.value = model.id;
+                        option.textContent = model.nomModel;
+                        modelSelect.appendChild(option);
+                    }
+                });--}}
+
+                modelSelect.disabled = false;
         });
     </script>
-
-
 
 @endsection
