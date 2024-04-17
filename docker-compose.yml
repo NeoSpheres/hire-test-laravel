@@ -20,11 +20,11 @@ services:
     # Database Service
     db:
         image: postgres:16.0
-        container_name: postgres
+        container_name: postgres_hire_test
         volumes:
             - ./postgresql/data:/var/lib/postgresql/data
         ports:
-            - "5432:5432"
+            - "14432:5432"
         environment:
             POSTGRES_DB: Crud
             POSTGRES_USER: postgres
