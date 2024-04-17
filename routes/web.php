@@ -28,7 +28,7 @@ Route::get('/generate-matricule', [DatatableCarController::class, 'generateMatri
 Route::get('/api/cars/{id}', [DatatableCarController::class, 'show']);  // Pour récupérer les détails de la voiture
 
 
-
+Route::get('/get-models/{brand}', [ModeleController::class, 'getModelsByBrand'])->name('get-models');
 
 
 
