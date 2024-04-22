@@ -7,13 +7,13 @@
     {{-- Sweet alert css --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!--<link
+    {{--<link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
         crossorigin="anonymous"
-    /> -->
-    <!-- Bootstrap CSS -->
+    /> --}}
+    {{-- Bootstrap CSS --}}
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -22,7 +22,7 @@
     />
 
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.min.css" rel="stylesheet">
-    <--<link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet" /> -->
+    <!--<link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet" /> -->
 
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -79,7 +79,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="col-md-9 offset-md-2">
+        <div class="col-md-9 offset-md-3">
             <section class="container mt-5 ml-auto">
                 @yield('content')
                 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
