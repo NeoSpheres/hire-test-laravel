@@ -104,7 +104,6 @@
                 <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js" type="text/javascript"></script>
 
                 {{-- Sweet alert js --}}
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.2/dist/sweetalert2.all.min.js"></script>
             </section>
         </div>
     </div>
