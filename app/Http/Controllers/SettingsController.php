@@ -14,19 +14,23 @@ class SettingsController extends Controller
 
     public function store(Request $request)
     {
-        // Validation des données reçues
-        $validatedData = $request->validate([
-            'topbar_color' => 'required|string',
-            'sidebar_color' => 'required|string',
-            'title_color' => 'required|string',
-        ]);
+        // Only perform validation if you want to ensure that when a color is set, it meets certain criteria.
+        $inputData = $request->only(['topbar_color', 'sidebar_color', 'title_color']);
 
-        // Enregistrement ou mise à jour des réglages
-        // Ici, j'utilise le premier enregistrement ou je crée un nouveau si aucun réglage n'existe
         $setting = Setting::first() ?? new Setting();
-        $setting->fill($validatedData);
+
+        foreach ($inputData as $key => $value) {
+            // Check if the value is not the default black color
+            if ($value !== '#000000') {
+                $setting->{$key} = $value;
+            }
+        }
+
         $setting->save();
 
         return redirect()->back()->with('success', 'Réglages sauvegardés avec succès!');
     }
+
+
+
 }

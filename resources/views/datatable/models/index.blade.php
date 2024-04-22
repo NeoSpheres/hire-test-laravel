@@ -303,13 +303,21 @@
                         .then(data => {
                             var modelSelect = $('#edit-nomModel');
                             modelSelect.empty();
+                            var modelNames = new Set();
+
                             var currentOption = $('<option>').val(response.data.nomModel).text(response.data.nomModel);
                             modelSelect.append(currentOption);
+                            modelNames.add(response.data.nomModel);
+
                             data.forEach(function(model) {
-                                var option = $('<option>').val(model.nomModel).text(model.nomModel);
-                                modelSelect.append(option);
+                                if (!modelNames.has(model.nomModel)) {
+                                    var option = $('<option>').val(model.nomModel).text(model.nomModel);
+                                    modelSelect.append(option);
+                                    modelNames.add(model.nomModel);
+                                }
                             });
                         });
+
                 }
             });
         }
