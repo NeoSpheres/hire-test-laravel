@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Postgres_Hire_Test",
+      "Group": "Servers",
+      "Host": "postgres_db_htl",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "postgres",
+      "Password": "password",
+      "SSLMode": "prefer"
+    }
+  }
+}

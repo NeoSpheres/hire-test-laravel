@@ -1,8 +1,6 @@
 version: '3.8'
 
-
 services:
-    # Application Service
     app:
         container_name: laravel
         build:
@@ -14,24 +12,20 @@ services:
             - "9000:9000"
         working_dir: /var/www
         depends_on:
-            - db
+            - postgres_db_htl
 
-
-    # Database Service
-    db:
+    postgres_db_htl:
+        container_name: db_hire_test_laravel
         image: postgres:16.0
-        container_name: postgres_hire_test
         volumes:
             - ./postgresql/data:/var/lib/postgresql/data
         ports:
             - "14432:5432"
         environment:
-            POSTGRES_DB: Crud
+            POSTGRES_DB: hire_test_laravel
             POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: arnoldetmaX29&
+            POSTGRES_PASSWORD: password
 
-
-    # Web Server Service
     nginx:
         image: nginx:alpine
         container_name: nginx
@@ -42,17 +36,17 @@ services:
             - ./nginx/conf.d/:/etc/nginx/conf.d/
         depends_on:
             - app
-            - db
+            - postgres_db_htl
 
-
-    # pgAdmin Service
     pgadmin:
         image: dpage/pgadmin4
         container_name: pgAdmin
         ports:
-            - "5050:80"
+            - "14230:80"
         depends_on:
-            - db
+            - postgres_db_htl
         environment:
-            PGADMIN_DEFAULT_EMAIL: prasunamudawari@gmail.com
+            PGADMIN_DEFAULT_EMAIL: admin@admin.com
             PGADMIN_DEFAULT_PASSWORD: password
+        volumes:
+            - ./servers.json:/pgadmin4/servers.json
