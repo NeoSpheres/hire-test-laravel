@@ -54,7 +54,7 @@
 <!-- Topbar -->
 <div class="topbar" style="background-color: {{ $settings->topbar_color ?? 'default-color' }}">
     <div class="container">
-         <h1 style="color: {{ $settings->title_color ?? 'default-text-color' }}">Test de recrutement</h1>
+         <h1 style="color: {{ $settings->title_color ?? 'default-text-color' }}">Hire test</h1>
 
 
     </div>
@@ -66,15 +66,15 @@
         <!-- Sidebar -->
         <div class="col-md-3 sidebar" style="background-color: {{ $settings->sidebar_color ?? 'default-color' }}">
             <ul>
-                <li><a href="{{ url('/') }}">Accueil</a></li>
-                <li><a href="{{ url('/user') }}">Utilisateurs</a></li>
-                <li><a href="{{ url('/cars') }}">Voitures</a></li>
-                <li><a href="{{ url('/model') }}">Modéles</a></li>
-                <li><a href="{{ url('/brands') }}">Marques</a></li>
-                <li><a href="{{ url('/setting') }}">Réglages</a></li>
-                <li><a href="{{ url('/datatable-cars') }}">datatable-cars</a></li>
-                <li><a href="{{ url('/ajax-brands') }}">Marques (ajax)</a></li>
-                <li><a href="{{ url('/ajax-models') }}">Modéles (ajax)</a></li>
+                <li><a href="{{ url('/') }}">Home</a></li>
+                <li><a href="{{ url('/user') }}">Users</a></li>
+                <li><a href="{{ url('/cars') }}">Cars</a></li>
+                <li><a href="{{ url('/model') }}">Car models</a></li>
+                <li><a href="{{ url('/brands') }}">Car brands</a></li>
+                <li><a href="{{ url('/setting') }}">Settings</a></li>
+                <li><a href="{{ url('/datatable-cars') }}">Cars datatable</a></li>
+                <li><a href="{{ url('/ajax-brands') }}">Brands (ajax)</a></li>
+                <li><a href="{{ url('/ajax-models') }}">Models (ajax)</a></li>
             </ul>
         </div>
 
