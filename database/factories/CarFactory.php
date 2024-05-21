@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Car;
-use App\Models\Modele;
+use App\Models\CarModel;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +22,7 @@ class CarFactory extends Factory
     public function definition(): array
     {
         return [
-            'model_id' => Modele::factory(),
+            'model_id' => CarModel::factory(),
             'user_id' => User::factory(),
             'color' => $this->faker->safeColorName,
             'matricule' => $this->faker->unique()->bothify('??-###-??')

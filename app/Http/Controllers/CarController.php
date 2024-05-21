@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Car;
-use App\Models\Modele;
+use App\Models\CarModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -26,7 +26,7 @@ class CarController extends Controller
      */
     public function create()
     {
-        $models = Modele::all();
+        $models = CarModel::all();
         $brands = Brand::all();
         $users = User::all();
         $matricule = generateMatricule();
@@ -72,7 +72,7 @@ class CarController extends Controller
     public function edit(Car $car)
     {
         $brands = Brand::all();
-        $models = Modele::all();
+        $models = CarModel::all();
         return view('cars.edit',compact('car', 'brands', 'models'));
     }
 
@@ -99,7 +99,7 @@ class CarController extends Controller
             if ($availableCar) {
                 $availableCar->user_id = $car->user->id;
             } else {
-                $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
+                $randomModel = CarModel::query()->whereNotNull('id')->inRandomOrder()->first();
 
                 $availableCar = Car::query()->create([
                     'model_id' => $randomModel->id,

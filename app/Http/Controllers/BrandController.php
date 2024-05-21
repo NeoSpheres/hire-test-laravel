@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Car;
-use App\Models\Modele;
+use App\Models\CarModel;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -74,7 +74,7 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
-        $models = Modele::where('brand_id', $brand->id)->get();
+        $models = CarModel::where('brand_id', $brand->id)->get();
         foreach ($models as $model) {
             $cars = Car::where('model_id', $model->id)->get();
             foreach ($cars as $car) {
@@ -96,7 +96,7 @@ class BrandController extends Controller
                         ]);
                         $newBrand->save();
 
-                        $randomModel = Modele::query()->create([
+                        $randomModel = CarModel::query()->create([
                             'nomModel' => 'Ranger',
                             'brand_id' => $newBrand->id,
                             'engine' => 'Hybrid',
@@ -111,9 +111,9 @@ class BrandController extends Controller
                         ]);
                     } else {
                         // Récupérer un modèle aléatoire avec le même brand_id que $brandFord
-                        $randModel = Modele::where('brand_id', $brandFord->id)->inRandomOrder()->first();
+                        $randModel = CarModel::where('brand_id', $brandFord->id)->inRandomOrder()->first();
                         if (!$randModel) {
-                            $randModel = Modele::query()->create([
+                            $randModel = CarModel::query()->create([
                                 'nomModel' => 'Ranger',
                                 'brand_id' => $brandFord->id,
                                 'engine' => 'Hybrid',

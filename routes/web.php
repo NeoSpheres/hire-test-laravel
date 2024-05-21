@@ -3,11 +3,11 @@
 use App\Http\Controllers\BrandAjaxController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CarController;
-use App\Http\Controllers\ModeleAjaxController;
+use App\Http\Controllers\CarModelAjaxController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\ModeleController;
+use App\Http\Controllers\CarModelController;
 use App\Http\Controllers\DatatableCarController;
 
 Route::get('/', function () {
@@ -18,7 +18,7 @@ Route::resource('user',UserController::class);
 Route::resource('setting',SettingsController::class);
 Route::resource('cars',CarController::class);
 Route::resource('brands',BrandController::class);
-Route::resource('model',ModeleController::class);
+Route::resource('model',CarModelController::class);
 
 //Route Datatable Cars
 Route::resource('datatable-cars',DatatableCarController::class);
@@ -28,7 +28,7 @@ Route::get('/generate-matricule', [DatatableCarController::class, 'generateMatri
 Route::get('/api/cars/{id}', [DatatableCarController::class, 'show']);  // Pour récupérer les détails de la voiture
 
 
-Route::get('/get-models/{brand}', [ModeleController::class, 'getModelsByBrand'])->name('get-models');
+Route::get('/get-models/{brand}', [CarModelController::class, 'getModelsByBrand'])->name('get-models');
 
 
 
@@ -44,13 +44,13 @@ Route::get('ajax-brands/show',[BrandAjaxController::class, 'show'])->name('ajax-
 Route::delete('ajax-brands/delete',[BrandAjaxController::class, 'destroy'])->name('ajax-brands.destroy');
 
 
-Route::get('ajax-models',[ModeleAjaxController::class, 'index'])->name('ajax-models.index');
-Route::get('ajax-models/fetch',[ModeleAjaxController::class, 'fetchModel'])->name('ajax-models.fetch');
-Route::post('ajax-models/store',[ModeleAjaxController::class, 'store'])->name('ajax-models.store');
-Route::get('ajax-models/edit',[ModeleAjaxController::class, 'edit'])->name('ajax-models.edit');
-Route::patch('ajax-models/update',[ModeleAjaxController::class, 'update'])->name('ajax-models.update');
-Route::get('ajax-models/show',[ModeleAjaxController::class, 'show'])->name('ajax-models.show');
-Route::delete('ajax-models/delete',[ModeleAjaxController::class, 'destroy'])->name('ajax-models.destroy');
+Route::get('ajax-models',[CarModelAjaxController::class, 'index'])->name('ajax-models.index');
+Route::get('ajax-models/fetch',[CarModelAjaxController::class, 'fetchModel'])->name('ajax-models.fetch');
+Route::post('ajax-models/store',[CarModelAjaxController::class, 'store'])->name('ajax-models.store');
+Route::get('ajax-models/edit',[CarModelAjaxController::class, 'edit'])->name('ajax-models.edit');
+Route::patch('ajax-models/update',[CarModelAjaxController::class, 'update'])->name('ajax-models.update');
+Route::get('ajax-models/show',[CarModelAjaxController::class, 'show'])->name('ajax-models.show');
+Route::delete('ajax-models/delete',[CarModelAjaxController::class, 'destroy'])->name('ajax-models.destroy');
 
 
 

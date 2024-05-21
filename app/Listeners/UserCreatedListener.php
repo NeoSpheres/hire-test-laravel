@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\UserCreated;
 use App\Models\Brand;
 use App\Models\Car;
-use App\Models\Modele;
+use App\Models\CarModel;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Str;
@@ -39,7 +39,7 @@ class UserCreatedListener
             // Associer à l'utilisateur la voiture trouvée
             $availableCar->user_id = $user->id;
         } else {
-            $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
+            $randomModel = CarModel::query()->whereNotNull('id')->inRandomOrder()->first();
             if(!$randomModel){
                 $randomBrand = Brand::query()->inRandomOrder()->first();
                 if(!$randomBrand){
@@ -49,7 +49,7 @@ class UserCreatedListener
                     ]);
                     $randBrand->save();
 
-                    $randomModel = Modele::query()->create([
+                    $randomModel = CarModel::query()->create([
                         'nomModel' => 'Ranger',
                         'brand_id' => $randBrand->id,
                         'engine' => 'Hybrid',

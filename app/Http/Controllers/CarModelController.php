@@ -5,19 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ModeleStore;
 use App\Models\Brand;
 use App\Models\Car;
-use App\Models\Modele;
+use App\Models\CarModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\AssignOp\Mod;
 
-class ModeleController extends Controller
+class CarModelController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = Modele::latest()->paginate(5);
+        $data = CarModel::latest()->paginate(5);
         return view('Modeles.index', compact('data'));
     }
 
@@ -42,7 +42,7 @@ class ModeleController extends Controller
             'engine' => 'required|in:Petrol,Hybrid,Electric',
         ]);
 
-        Modele::create([
+        CarModel::create([
             'nomModel' => $request->nomModel,
             'brand_id' => $request->brand_id,
             'engine' => $request->engine,
@@ -56,7 +56,7 @@ class ModeleController extends Controller
      */
     public function show(string $id)
     {
-        $modele = Modele::find($id);
+        $modele = CarModel::find($id);
         $brands=Brand::all();
         return view('Modeles.show', compact('modele','brands'));
     }
@@ -64,7 +64,7 @@ class ModeleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Modele $model)
+    public function edit(CarModel $model)
     {
         $brands = Brand::all();
         return view('Modeles.editModel', compact('model','brands'));
@@ -74,7 +74,7 @@ class ModeleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Modele $model)
+    public function update(Request $request, CarModel $model)
     {
         // Validation des données
         $validatedData = $request->validate([
@@ -96,7 +96,7 @@ class ModeleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Modele $model)
+    public function destroy(CarModel $model)
     {
         $cars = Car::where('model_id', $model->id)->get();
 
@@ -108,7 +108,7 @@ class ModeleController extends Controller
                         $availableCar->user_id = $car->user->id;
                     } else {
                         // Récupérer un modèle aléatoire qui n'a pas l'ID spécifique de $model->id
-                        $randomModel = Modele::query()->whereNotIn('id', [$model->id])->inRandomOrder()->first();
+                        $randomModel = CarModel::query()->whereNotIn('id', [$model->id])->inRandomOrder()->first();
                         if (!$randomModel) {
                             $brand = Brand::query()->where('name', 'Ford')->first();
                             if (!$brand) {
@@ -118,7 +118,7 @@ class ModeleController extends Controller
                                 ]);
                                 $newBrand->save();
 
-                                $randomModel = Modele::query()->create([
+                                $randomModel = CarModel::query()->create([
                                     'nomModel' => 'Ranger',
                                     'brand_id' => $newBrand->id,
                                     'engine' => 'Hybrid',
@@ -126,7 +126,7 @@ class ModeleController extends Controller
                                 $randomModel->save();
 
                             } else {
-                                $randomModel = Modele::query()->create([
+                                $randomModel = CarModel::query()->create([
                                     'nomModel' => $brand->name,
                                     'brand_id' => $brand->id,
                                     'engine' => 'Hybrid',
@@ -159,7 +159,7 @@ class ModeleController extends Controller
     public function getModelsByBrand($brandId)
     {
         // Récupérer les modèles associés à la marque spécifiée
-        $models = Modele::where('brand_id', $brandId)->get();
+        $models = CarModel::where('brand_id', $brandId)->get();
 
         // Retourner les modèles au format JSON
         return response()->json($models);

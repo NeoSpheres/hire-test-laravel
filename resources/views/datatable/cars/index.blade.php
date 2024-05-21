@@ -17,7 +17,7 @@
                     <th>Model</th>
                     <th>Owner</th>
                     <th>Color</th>
-                    <th>Matricule</th>
+                    <th>Reg. plate</th>
                     <th>Action </th>
                 </thead>
                 <tbody>

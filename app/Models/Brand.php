@@ -15,6 +15,6 @@ class Brand extends Model
     ];
 
     public function modele(){
-        return $this->belongsTo(Modele::class,'id');
+        return $this->belongsTo(CarModel::class,'id');
     }
 }

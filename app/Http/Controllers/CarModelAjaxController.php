@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
-use App\Models\Modele;
+use App\Models\CarModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ModeleAjaxController extends Controller
+class CarModelAjaxController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -40,11 +40,11 @@ class ModeleAjaxController extends Controller
         $columnSortOrder = $orderArray[0]['dir']; // This will get us order direction(ASC/DESC)
         $searchValue = $searchArray['value']; // This is search value
 
-        $models = Modele::query()->select('modeles.id', 'modeles.nomModel', 'modeles.brand_id', 'modeles.engine')
+        $models = CarModel::query()->select('modeles.id', 'modeles.nomModel', 'modeles.brand_id', 'modeles.engine')
             ->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id'); // Jointure avec la table brands
         $total = $models->count();
 
-        $totalFilterModels = Modele::query()->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id');
+        $totalFilterModels = CarModel::query()->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id');
         if (!empty($searchValue)) {
             $totalFilterModels = $totalFilterModels->where(function($query) use ($searchValue) {
                 $query->where('modeles.nomModel', 'like', '%' . $searchValue . '%')
@@ -54,7 +54,7 @@ class ModeleAjaxController extends Controller
         }
         $totalFilter = $totalFilterModels->count();
 
-        $arrData = Modele::query()->select('modeles.id', 'modeles.nomModel', 'modeles.brand_id', 'modeles.engine')
+        $arrData = CarModel::query()->select('modeles.id', 'modeles.nomModel', 'modeles.brand_id', 'modeles.engine')
             ->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id')
             ->skip($start)
             ->take($rowPerPage)
@@ -104,7 +104,7 @@ class ModeleAjaxController extends Controller
                 'errors' => $input->messages(),
             ]);
         } else {
-            $model = Modele::query()->create([
+            $model = CarModel::query()->create([
                 'nomModel' => $request->nomModel,
                 'brand_id' => $request->brand_id,
                 'engine' => $request->engine,
@@ -124,7 +124,7 @@ class ModeleAjaxController extends Controller
     public function show(Request $request)
     {
         $id = $request->query('id');
-        $model = Modele::findOrFail($id);
+        $model = CarModel::findOrFail($id);
         $brand = Brand::query()->findOrFail($model->brand_id);
         return response()->json([
             'data' => $model,
@@ -138,7 +138,7 @@ class ModeleAjaxController extends Controller
     public function edit(Request $request)
     {
         $where = array('id' => $request->id);
-        $model = Modele::query()->where($where)->first();
+        $model = CarModel::query()->where($where)->first();
         $brand = Brand::query()->findOrFail($model->brand_id);
         return response()->json([
             'status' => 200,
@@ -160,7 +160,7 @@ class ModeleAjaxController extends Controller
             'engine' => 'required|in:Petrol,Hybrid,Electric',
         ]);
 
-        $model = Modele::findOrFail($id);
+        $model = CarModel::findOrFail($id);
 
         if ($input->fails()) {
             return response()->json([
@@ -187,7 +187,7 @@ class ModeleAjaxController extends Controller
     public function destroy(Request $request)
     {
         $id = $request->query('id');
-        $model = Modele::findOrFail($id);
+        $model = CarModel::findOrFail($id);
         $model->delete();
         return response()->json([
             //'data' => $model,

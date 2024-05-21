@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Events\UserCreated;
 use App\Models\Brand;
 use App\Models\Car;
-use App\Models\Modele;
+use App\Models\CarModel;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

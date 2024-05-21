@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Car;
-use App\Models\Modele;
+use App\Models\CarModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ class DatatableCarController extends Controller
     public function index()
     {
         $cars = Car::all();
-        $models = Modele::all();
+        $models = CarModel::all();
         $brands = Brand::all(); // Récupère toutes les marques de la base de données
         $users = User::all();
         $matricule = generateMatricule();
@@ -32,7 +32,7 @@ class DatatableCarController extends Controller
      */
     public function create(Request $request)
     {
-        $models = Modele::all();
+        $models = CarModel::all();
         $brands = Brand::all();
         $users = User::all();
         $matricule = generateMatricule();
@@ -71,7 +71,7 @@ class DatatableCarController extends Controller
     {
         $car = Car::find($id);
         $brand = Brand::find($car->modele->brand_id);
-        $model = Modele::find($car->model_id);
+        $model = CarModel::find($car->model_id);
         if ($car) {
             return response()->json(['status' => 'success', 'car' => $car,'brand'=>$brand,'model'=>$model]);
         } else {
@@ -87,7 +87,7 @@ class DatatableCarController extends Controller
     public function edit(Car $car)
     {
         $brands = Brand::all();
-        $models = Modele::all();
+        $models = CarModel::all();
         return view('datatable.cars.edit',compact('car', 'brands', 'models'));
     }
 
@@ -120,7 +120,7 @@ class DatatableCarController extends Controller
             if ($availableCar) {
                 $availableCar->user_id = $car->user->id;
             } else {
-                $randomModel = Modele::query()->whereNotNull('id')->inRandomOrder()->first();
+                $randomModel = CarModel::query()->whereNotNull('id')->inRandomOrder()->first();
 
                 $availableCar = Car::query()->create([
                     'model_id' => $randomModel->id,
@@ -138,7 +138,7 @@ class DatatableCarController extends Controller
     public function getModelsByBrand($brandId)
     {
         try {
-            $models = Modele::where('brand_id', $brandId)->get();
+            $models = CarModel::where('brand_id', $brandId)->get();
             return response()->json($models);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Something went wrong'], 500);
