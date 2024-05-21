@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\MatriculeFrance;
+use App\Rule\MatriculeFrance;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ModeleStore extends FormRequest
