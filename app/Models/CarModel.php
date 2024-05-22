@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class CarModel extends Model
 {
@@ -14,7 +16,7 @@ class CarModel extends Model
     protected $fillable = [
         'nomModel',
         'brand_id',
-        'engine'
+        'engine_type_id'
     ];
 
     public function Brand(){
@@ -22,5 +24,10 @@ class CarModel extends Model
     }
     public function Car(){
         return $this->hasMany(Car::class,'id');
+    }
+
+    public function engineType(): BelongsTo
+    {
+        return $this->belongsTo(EngineType::class);
     }
 }

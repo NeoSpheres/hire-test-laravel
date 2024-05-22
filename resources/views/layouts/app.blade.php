@@ -71,6 +71,7 @@
                 <li><a href="{{ url('/cars') }}">Cars</a></li>
                 <li><a href="{{ url('/model') }}">Car models</a></li>
                 <li><a href="{{ url('/brands') }}">Car brands</a></li>
+                <li><a href="{{ url('/engine-type') }}">Engine Types</a></li>
                 <li><a href="{{ url('/setting') }}">Settings</a></li>
                 <li><a href="{{ url('/datatable-cars') }}">Cars datatable</a></li>
                 <li><a href="{{ url('/ajax-brands') }}">Brands (ajax)</a></li>

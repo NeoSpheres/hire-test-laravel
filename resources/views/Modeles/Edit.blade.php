@@ -27,12 +27,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Engine</label>
-                    <select id="engine" name="engine" class="form-control">
-                        <option selected>Electric</option>
-                        <option value="Hybrid">Hybrid</option>
-                        <option value="Electric">Electric</option>
-                        <option value="Petrol">Petrol</option>
+                    <label for="engine_type_id">Engine Type</label>
+                    <select id="engine_type_id" name="engine_type_id" class="form-control">
+                        @foreach($engineTypes as $engineType)
+                            <option value="{{ $engineType->id }}">{{ $engineType->name }}</option>
+                        @endforeach
                     </select>
                 </div>
 

@@ -26,17 +26,12 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label>Engine</label>
-                    <select id="engine" name="engine" class="form-control">
-                        @foreach(['Hybrid', 'Electric', 'Petrol'] as $type)
-                            <option value="{{ $type }}" {{ $model->engine == $type ? 'selected' : '' }}>{{ $type }}</option>
+                    <label for="engine_type_id">Engine</label>
+                    <select id="engine_type_id" name="engine_type_id" class="form-control">
+                        @foreach($engineTypes as $engineType)
+                            <option value="{{ $engineType?->id }}" {{ $model->engineType?->name === $engineType->name ? 'selected' : '' }}>{{ $engineType?->name }}</option>
                         @endforeach
                     </select>
-                    {{--<select id="engine" name="engine" class="form-control">
-                        <option value="Hybrid" {{ $model->engine == 'Hybrid' ? 'selected' : '' }}>Hybrid</option>
-                        <option value="Electric" {{ $model->engine == 'Electric' ? 'selected' : '' }}>Electric</option>
-                        <option value="Petrol" {{ $model->engine == 'Petrol' ? 'selected' : '' }}>Petrol</option>
-                    </select>--}}
                 </div>
                 <div class="d-flex justify-content-between">
                     <a class="btn btn-secondary" href="{{ route('model.index') }}">Back</a>

@@ -20,7 +20,7 @@
         <tr>
             <th scope="col">#</th>
             <th>Model</th>
-            <th>Engine</th>
+            <th>Engine Type</th>
             <th>Brand</th>
             <th scope="col">Action</th>
         </tr>
@@ -30,7 +30,7 @@
             <tr>
                 <th scope="row">{{ ++$key }}</th>
                 <td>{{ $val->nomModel }}</td>
-                <td>{{ $val->engine }}</td>
+                <td>{{ $val->engineType?->name }}</td>
                 <td>{{ $val->brand ? $val->brand->name : 'No brand' }}</td> <!-- Vérification de la marque avant d'accéder à 'name' -->
                 <td>
                     <a href="{{ route('model.show', $val->id) }}" class="btn btn-secondary mx-2">Show</a>

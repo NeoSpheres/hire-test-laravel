@@ -4,6 +4,7 @@ use App\Http\Controllers\BrandAjaxController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CarModelAjaxController;
+use App\Http\Controllers\EngineTypeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
@@ -19,6 +20,7 @@ Route::resource('setting',SettingsController::class);
 Route::resource('cars',CarController::class);
 Route::resource('brands',BrandController::class);
 Route::resource('model',CarModelController::class);
+Route::resource('engine-type',EngineTypeController::class);
 
 //Route Datatable Cars
 Route::resource('datatable-cars',DatatableCarController::class);

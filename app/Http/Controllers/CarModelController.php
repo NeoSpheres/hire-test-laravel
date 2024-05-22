@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ModeleStore;
+use App\Http\Requests\CarModelRequest;
 use App\Models\Brand;
 use App\Models\Car;
 use App\Models\CarModel;
-use App\Models\User;
-use Illuminate\Http\Request;
-use PhpParser\Node\Expr\AssignOp\Mod;
+use App\Models\EngineType;
 
 class CarModelController extends Controller
 {
@@ -27,37 +25,27 @@ class CarModelController extends Controller
      */
     public function create()
     {
-        $brands=Brand::all();
-        return view('Modeles.create',compact('brands'));
+        $brands = Brand::all();
+        $engineTypes = EngineType::all();
+        return view('Modeles.create',compact('brands', 'engineTypes'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CarModelRequest $request)
     {
-        $request->validate([
-            'nomModel' => 'required|string',
-            'brand_id' => 'required',
-            'engine' => 'required|in:Petrol,Hybrid,Electric',
-        ]);
-
-        CarModel::create([
-            'nomModel' => $request->nomModel,
-            'brand_id' => $request->brand_id,
-            'engine' => $request->engine,
-        ]);
-
+        CarModel::create($request->validated());
         return redirect()->route('model.index')->with('success', 'Modèle créé avec succès.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(CarModel $modele)
     {
-        $modele = CarModel::find($id);
-        $brands=Brand::all();
+        $brands = Brand::all();
+        $modele->load('engineType');
         return view('Modeles.show', compact('modele','brands'));
     }
 
@@ -67,24 +55,19 @@ class CarModelController extends Controller
     public function edit(CarModel $model)
     {
         $brands = Brand::all();
-        return view('Modeles.editModel', compact('model','brands'));
+        $engineTypes = EngineType::all();
+        $model->load('engineType');
+        return view('Modeles.editModel', compact('model','brands', 'engineTypes'));
     }
 
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CarModel $model)
+    public function update(CarModelRequest $request, CarModel $model)
     {
-        // Validation des données
-        $validatedData = $request->validate([
-            'nomModel' => 'required|string',
-            'brand_id' => 'required',
-            'engine' => 'required|in:Petrol,Hybrid,Electric',
-        ]);
-
         // Mise à jour du modèle dans la base de données
-        $model->update($validatedData);
+        $model->update($request->validated());
 
         // Redirection après la mise à jour
         return redirect()->route('model.index')->with('success', 'Modèle mis à jour avec succès.');
@@ -121,7 +104,7 @@ class CarModelController extends Controller
                                 $randomModel = CarModel::query()->create([
                                     'nomModel' => 'Ranger',
                                     'brand_id' => $newBrand->id,
-                                    'engine' => 'Hybrid',
+                                    'engine_type_id' => EngineType::first()->id ?? null,
                                 ]);
                                 $randomModel->save();
 
@@ -129,7 +112,7 @@ class CarModelController extends Controller
                                 $randomModel = CarModel::query()->create([
                                     'nomModel' => $brand->name,
                                     'brand_id' => $brand->id,
-                                    'engine' => 'Hybrid',
+                                    'engine_type_id' => EngineType::first()->id ?? null,
                                 ]);
                                 $randomModel->save();
                             }

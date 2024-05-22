@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Car;
 use App\Models\CarModel;
+use App\Models\EngineType;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -41,8 +42,6 @@ class CarController extends Controller
         $request->validate([
             'model_id' => 'required|exists:modeles,id',
             'user_id' => 'nullable|exists:users,id',
-
-
             'color' => 'required|string|max:25',
         ]);
 
