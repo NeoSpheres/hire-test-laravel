@@ -6,6 +6,7 @@ use App\Events\UserCreated;
 use App\Models\Brand;
 use App\Models\Car;
 use App\Models\CarModel;
+use App\Models\Tire;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Str;
@@ -48,52 +49,35 @@ class UserCreatedListener
                         'country' => 'US',
                     ]);
                     $randBrand->save();
-
-                    $randomModel = CarModel::query()->create([
-                        'nomModel' => 'Ranger',
-                        'brand_id' => $randBrand->id,
-                        'engine' => 'Hybrid',
-                    ]);
-                    $randomModel->save();
                 }
+
+                $randomModel = CarModel::query()->create([
+                    'nomModel' => 'Ranger',
+                    'brand_id' => $randBrand->id,
+                    'engine' => 'Hybrid',
+                ]);
+                $randomModel->save();
+            }
+
+            $randomTire = Tire::query()->inRandomOrder()->first();
+            if(!$randomTire){
+                $randomTire = Tire::query()->create([
+                    'brand' => 'Michelin',
+                    'model' => 'Random',
+                    'type' => 'summer',
+                ]);
+                $randomTire->save();
             }
 
             $availableCar = Car::query()->create([
                 'model_id' => $randomModel->id,
                 'user_id' => $user->id,
                 'color' => 'black', // Par défaut
+                'front_tire_id' => $randomTire->id,
+                'rear_tire_id' => $randomTire->id,
                 'matricule' => generateMatricule(),
             ]);
         }
-
-        //$availableCar->save();
-
         return $availableCar;
-
-        /*if (!$user->car) {
-
-            // Récupérer les voitures disponibles et choisir la première
-            $availableCar = Car::whereNull('user_id')->first();
-
-            if ($availableCar) {
-                // Associer à l'utilisateur la voiture trouvée
-                $availableCar->user_id = $user->id;
-                $availableCar->save();
-            } else {
-                // Récupérer un ID de modèle aléatoire
-                $randomBrand = Brand::inRandomOrder()->value('id');
-                $randomModelId = Modele::inRandomOrder()->value('id');
-                $randomColor = generateRandomColor();
-
-                // Créer une nouvelle voiture avec l'ID de modèle aléatoire
-                $car = Car::create([
-                    'brand_id' => $randomBrand,
-                    'model_id' => $randomModelId,
-                    'user_id' => $user->id,
-                    'color' => $randomColor, // Par défaut
-                    'matricule' => generateMatricule(),
-                ]);
-            }
-        }*/
     }
 }
