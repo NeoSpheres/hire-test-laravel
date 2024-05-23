@@ -44,6 +44,34 @@
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
+                <div class="form-group">
+                    <label for="front_tire_id">Front tire:</label>
+                    <select name="front_tire_id" id="front_tire_id" class="form-control">
+                        <option value="0">Choose</option>
+                        @foreach ($tires as $tire)
+                            <option value="{{ $tire->id }}" {{old('front_tire_id', $car->front_tire_id) == $tire->id ? 'selected' : ''}}>
+                                {{ $tire->brand . " / " . $tire->model ." / " . $tire->type }}</option>
+                        @endforeach
+                    </select>
+                    @error('front_tire_id')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="rear_tire_id">Rear tire:</label>
+                    <select name="rear_tire_id" id="rear_tire_id" class="form-control">
+                        <option value="0">Choose</option>
+                        @foreach ($tires as $tire)
+                            <option value="{{ $tire->id }}" {{old('rear_tire_id', $car->rear_tire_id) == $tire->id ? 'selected' : ''}}>
+                                {{ $tire->brand . " / " . $tire->model ." / " . $tire->type }}</option>
+                        @endforeach
+                    </select>
+                    @error('rear_tire_id')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 {{--<div class="form-group">
                     <label>Type</label>
                     <select id="engine" name="engine" class="form-control">

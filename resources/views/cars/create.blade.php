@@ -48,6 +48,35 @@
                     <p class="text text-danger">{{ $message }}</p>
                     @enderror
                 </div>
+
+                <div class="form-group">
+                    <label for="front_tire_id">Front tire:</label>
+                    <select name="front_tire_id" id="front_tire_id" class="form-control">
+                        <option value="">Choose</option>
+                        @foreach ($tires as $tire)
+                            <option value="{{ $tire->id }}" {{old('front_tire_id') == $tire->id ? 'selected' : ''}}>
+                                {{ $tire->brand . " / " . $tire->model ." / " . ucfirst($tire->type) }}</option>
+                        @endforeach
+                    </select>
+                    @error('front_tire_id')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="rear_tire_id">Rear tire:</label>
+                    <select name="rear_tire_id" id="rear_tire_id" class="form-control">
+                        <option value="">Choose</option>
+                        @foreach ($tires as $tire)
+                            <option value="{{ $tire->id }}" {{old('rear_tire_id') == $tire->id ? 'selected' : ''}}>
+                                {{ $tire->brand . " / " . $tire->model ." / " . ucfirst($tire->type) }}</option>
+                        @endforeach
+                    </select>
+                    @error('rear_tire_id')
+                    <p class="text text-danger">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="form-group">
                     <label for="matricule">Registration</label>
                     <input type="text" name="matricule" class="form-control" value="{{ $matricule }}" readonly disabled>

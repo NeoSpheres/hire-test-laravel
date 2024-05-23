@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarRequest;
 use App\Models\Brand;
 use App\Models\Car;
 use App\Models\CarModel;
 use App\Models\EngineType;
+use App\Models\Tire;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,8 @@ class CarController extends Controller
      */
     public function index()
     {
-        $cars = Car::query()->latest()->paginate(5);
+        $cars = Car::with(["user", "frontTire", "rearTire"])->latest()->paginate(5);
+
         return view('cars.index', compact('cars'))->with(request()->input('page'));
     }
 
@@ -31,26 +34,24 @@ class CarController extends Controller
         $brands = Brand::all();
         $users = User::all();
         $matricule = generateMatricule();
-        return view('cars.create', compact('models','brands', 'users', 'matricule'));
+        $tires = Tire::all();
+        return view('cars.create', compact('models','brands', 'users', 'matricule', 'tires'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CarRequest $request)
     {
-        $request->validate([
-            'model_id' => 'required|exists:modeles,id',
-            'user_id' => 'nullable|exists:users,id',
-            'color' => 'required|string|max:25',
-        ]);
-
         $matricule = $request->input('matricule_hidden');
 
         Car::create([
+            'user_id' => $request->user_id,
             'model_id' => $request->model_id,
             'color' => $request->color,
             'matricule' => $matricule,
+            'front_tire_id' => $request->front_tire_id,
+            'rear_tire_id' => $request->rear_tire_id,
         ]);
 
         return redirect()->route('cars.index')->with('success', 'Car created successfully !');
@@ -72,17 +73,18 @@ class CarController extends Controller
     {
         $brands = Brand::all();
         $models = CarModel::all();
-        return view('cars.edit',compact('car', 'brands', 'models'));
+        $tires = Tire::all();
+        return view('cars.edit',compact('car', 'brands', 'models', 'tires'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Car $car)
+    public function update(CarRequest $request, Car $car)
     {
         $input = $request->except('matricule');
-
         $car->update($input);
+
         return redirect()->route('cars.index')->with('success','Car updated successfully !');
     }
 
