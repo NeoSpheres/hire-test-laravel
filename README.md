@@ -14,6 +14,7 @@ Mini backoffice to test applicants tech level with Laravel
 Copy .env.default to .env
 
 * Migrations
+
 docker-compose exec app composer update
 
 docker-compose exec app php artisan migrate
