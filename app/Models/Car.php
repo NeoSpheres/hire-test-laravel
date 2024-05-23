@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Car extends Model
 {
@@ -13,7 +15,9 @@ class Car extends Model
         'model_id',
         'user_id',
         'color',
-        'matricule'
+        'matricule',
+        'front_tire_id',
+        'rear_tire_id',
     ];
 
     public function modele()
@@ -24,5 +28,15 @@ class Car extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function frontTire(): BelongsTo
+    {
+        return $this->belongsTo(Tire::class);
+    }
+
+    public function rearTire(): BelongsTo
+    {
+        return $this->belongsTo(Tire::class);
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\CarModelController;
 use App\Http\Controllers\DatatableCarController;
+use \App\Http\Controllers\TireController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +22,7 @@ Route::resource('cars',CarController::class);
 Route::resource('brands',BrandController::class);
 Route::resource('model',CarModelController::class);
 Route::resource('engine-type',EngineTypeController::class);
+Route::resource('tires', TireController::class);
 
 //Route Datatable Cars
 Route::resource('datatable-cars',DatatableCarController::class);
@@ -53,7 +55,6 @@ Route::get('ajax-models/edit',[CarModelAjaxController::class, 'edit'])->name('aj
 Route::patch('ajax-models/update',[CarModelAjaxController::class, 'update'])->name('ajax-models.update');
 Route::get('ajax-models/show',[CarModelAjaxController::class, 'show'])->name('ajax-models.show');
 Route::delete('ajax-models/delete',[CarModelAjaxController::class, 'destroy'])->name('ajax-models.destroy');
-
 
 
 

@@ -22,6 +22,8 @@
             <th>Brand</th>
             <th>Model</th>
             <th>Owner</th>
+            <th>Front tire</th>
+            <th>Rear tire</th>
             <th>Color</th>
             <th>Registration</th>
             <th scope="col">Action</th>
@@ -34,6 +36,8 @@
                 <td>{{ $val->modele->brand->name }}</td>
                 <td>{{ $val->modele->nomModel }}</td>
                 <td>{{ $val->user ? $val->user->name : '' }}</td>
+                <td>{{ $val->frontTire->full_tire_name }}</td>
+                <td>{{ $val->rearTire->full_tire_name }}</td>
                 <td>{{ $val->color }}</td>
                 <td>{{ $val->matricule }}</td>
                 <td>

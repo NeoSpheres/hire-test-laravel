@@ -29,6 +29,16 @@
                         <strong>Type : </strong>
                         {{$car->modele->engine}}
                     </div>
+
+                    <div class="mb-3">
+                        <strong>Front tire : </strong>
+                        {{$car->frontTire->full_tire_name}}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Rear tire : </strong>
+                        {{$car->rearTire->full_tire_name}}
+                    </div>
                 </div>
             </div>
             <div class="d-flex justify-content-between">
