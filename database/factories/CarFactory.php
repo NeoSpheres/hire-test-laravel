@@ -25,7 +25,9 @@ class CarFactory extends Factory
             'model_id' => CarModel::factory(),
             'user_id' => User::factory(),
             'color' => $this->faker->safeColorName,
-            'matricule' => $this->faker->unique()->bothify('??-###-??')
+            'matricule' => $this->faker->unique()->bothify('??-###-??'),
+            'front_tire_id' => \App\Models\Tire::factory(),
+            'rear_tire_id' => \App\Models\Tire::factory(),
         ];
     }
 }

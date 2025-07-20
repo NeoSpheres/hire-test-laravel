@@ -1,0 +1,272 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Hire Test API",
+        "description": "API documentation for the Hire Test Laravel project",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/tire-maintenance": {
+            "get": {
+                "tags": [
+                    "Tire Maintenance"
+                ],
+                "summary": "List tire maintenance requests",
+                "operationId": "f247535ba5129ec8270f0dca63499241",
+                "parameters": [
+                    {
+                        "name": "filters",
+                        "in": "query",
+                        "description": "Filter parameters",
+                        "required": false,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of tire maintenance requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TireMaintenanceRequest"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Tire Maintenance"
+                ],
+                "summary": "Create a new tire maintenance request",
+                "operationId": "7204a08bf9a35cb886ac00d61160c315",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "car_id",
+                                    "maintenance_scheduled_at",
+                                    "tires"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "car_id": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "maintenance_scheduled_at": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2024-07-20T10:00:00Z"
+                                    },
+                                    "tires": {
+                                        "type": "array",
+                                        "items": {
+                                            "required": [
+                                                "tire_id",
+                                                "position"
+                                            ],
+                                            "properties": {
+                                                "tire_id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "position": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "front_left",
+                                                        "front_right",
+                                                        "rear_left",
+                                                        "rear_right"
+                                                    ],
+                                                    "example": "front_left"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tire maintenance request created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TireMaintenanceRequest"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tire-maintenance/process/{request_id}": {
+            "put": {
+                "tags": [
+                    "Tire Maintenance"
+                ],
+                "summary": "Process a tire maintenance request",
+                "operationId": "f2994eb875e11349fe55e7118a760514",
+                "parameters": [
+                    {
+                        "name": "request_id",
+                        "in": "path",
+                        "description": "ID of the tire maintenance request",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "in_progress",
+                                            "completed",
+                                            "cancelled"
+                                        ],
+                                        "example": "completed"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tire maintenance request processed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TireMaintenanceRequest"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "TireMaintenanceRequest": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "car_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "in_progress",
+                            "completed",
+                            "cancelled"
+                        ],
+                        "example": "pending"
+                    },
+                    "maintenance_scheduled_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-07-20T10:00:00Z"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "car": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "user": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "tires": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TireMaintenanceTire"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "TireMaintenanceTire": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "position": {
+                        "type": "string",
+                        "enum": [
+                            "front_left",
+                            "front_right",
+                            "rear_left",
+                            "rear_right"
+                        ],
+                        "example": "front_left"
+                    },
+                    "tire_id": {
+                        "type": "integer",
+                        "example": 5
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Tire Maintenance",
+            "description": "Tire maintenance request management"
+        }
+    ]
+}

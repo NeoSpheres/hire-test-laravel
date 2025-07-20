@@ -1,0 +1,93 @@
+{
+	"info": {
+		"_postman_id": "aa55ca1a-c07d-4bb4-bca6-811812c2d994",
+		"name": "NeoSpheres",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8390379"
+	},
+	"item": [
+		{
+			"name": "Tire Maintenance Requests",
+			"item": [
+				{
+					"name": "Index Requests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:14200/api/tire-maintenance?filters[car_model]=ranger&filters[car_brand]=ford&filters[username]=conrad&filters[plate_number]=249",
+							"host": [
+								"localhost"
+							],
+							"port": "14200",
+							"path": [
+								"api",
+								"tire-maintenance"
+							],
+							"query": [
+								{
+									"key": "filters[car_model]",
+									"value": "ranger"
+								},
+								{
+									"key": "filters[car_brand]",
+									"value": "ford"
+								},
+								{
+									"key": "filters[username]",
+									"value": "conrad"
+								},
+								{
+									"key": "filters[plate_number]",
+									"value": "249"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Store Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:14200/api/tire-maintenance/",
+							"host": [
+								"localhost"
+							],
+							"port": "14200",
+							"path": [
+								"api",
+								"tire-maintenance",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Process Request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:14200/api/tire-maintenance/process/1",
+							"host": [
+								"localhost"
+							],
+							"port": "14200",
+							"path": [
+								"api",
+								"tire-maintenance",
+								"process",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

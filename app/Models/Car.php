@@ -20,6 +20,13 @@ class Car extends Model
         'rear_tire_id',
     ];
 
+    /**
+     * @var string[]
+     */
+    protected $casts = [
+        'last_maintenance_date' => 'datetime',
+    ];
+
     public function modele()
     {
         return $this->belongsTo(CarModel::class, 'model_id');

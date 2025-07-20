@@ -3,13 +3,13 @@
 namespace App\Providers;
 
 use App\Listeners\UserCreatedListener;
+use App\Services\Contracts\ITireMaintenanceService;
+use App\Services\TireMaintenanceService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Setting;
-use Illuminate\Support\Facades\Validator;
-
 
 
 class AppServiceProvider extends ServiceProvider
@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(ITireMaintenanceService::class, TireMaintenanceService::class);
     }
 
 
@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
      ]);
 
      $response = $this->get('/user');
-     dd(json_encode(json_decode($response->content()),JSON_PRETTY_PRINT));
+     dd(json_encode(json_decode($response->content()),JSON_PRETTY_PRINT)); // Where's your xDebug now? :D
     // $response->assertStatus(200);
     // $response->assertDontSee(__('No user found'));
     // $response->assertSee('User is here');
@@ -69,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
         {
             //$posts = post::factory(5)->create(); // with create we can make insertion in our databases based on our factory model
                 $posts = Post::factory(5)->make(); //==> with make we can just create instances without make insertion in ou databases
-            dd($posts); // (dump and die) ==> it show if our users really be inserted in our databases
+            dd($posts); // (dump and die) ==> it show if our users really be inserted in our databases + dd() for the win :D
             //$response=$this->get('/user'); // Method get to simul the navigation to the rout ('/user')
             $response->assertStatus(200); // verifie the response of our requettes
             $response->assertViewHas('users',function ($collection) use ($posts){

@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
+use App\Enums\TireMaintenance\TireMaintenanceRequestStatusEnum;
+use App\Models\TireMaintenance\TireMaintenanceRequestTire;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Tire extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'brand',
         'model',
@@ -44,5 +49,22 @@ class Tire extends Model
     public function carRearTire(): HasMany
     {
         return $this->hasMany(Car::class, "rear_tire_id");
+    }
+
+    /**
+     * @return HasManyThrough
+     */
+    public function tireReplacements(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Tire::class,
+            TireMaintenanceRequestTire::class,
+            'tire_maintenance_request_id',
+            'id',
+            'id',
+            'tire_id'
+        )->whereHas('tire_maintenance_request', function ($query) {
+            $query->where('status', TireMaintenanceRequestStatusEnum::COMPLETED);
+        });
     }
 }
