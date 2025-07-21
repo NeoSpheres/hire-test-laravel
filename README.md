@@ -138,3 +138,9 @@ This makes interactive debugging and experimentation in Tinker much more conveni
 - All new business logic is implemented in `TireMaintenanceController` and `TireMaintenanceService`.
 - OpenAPI annotations are provided directly in the controller for easy maintenance and discoverability.
 
+---
+
+## Postman Collection
+
+A Postman collection (`NeoSpheres.postman_collection.json`) is provided in the repository. You can use it to quickly test and explore the Tire Maintenance API endpoints. Import it into Postman to get started with example requests for listing, creating, and processing tire maintenance requests.
+
