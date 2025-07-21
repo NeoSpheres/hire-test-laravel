@@ -1,6 +1,26 @@
 # test-recrutement-laravel
 
+[![Laravel 11](https://img.shields.io/badge/Laravel-11.x-red?logo=laravel)](https://laravel.com/docs/11.x)
+[![Docker](https://img.shields.io/badge/Docker-ready-blue?logo=docker)](https://www.docker.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14%2B-blue?logo=postgresql)](https://www.postgresql.org/)
+[![PHP 8.2](https://img.shields.io/badge/PHP-8.2-blueviolet?logo=php)](https://www.php.net/releases/8.2/)
+
 Mini backoffice to test applicants tech level with Laravel
+
+---
+
+## Notes to Reviewers
+
+- **Task conditions:** It was unclear whether scheduling a tire maintenance request should be per car or per user. Since each `Car` is linked to a `User`, the `User` should never be missing. I expect `user_id` as a parameter, and if missing, I get the user from the car relation. This could be improved.
+- **Tire replacement records:** I used a different name for these records, referencing `tire_maintenance_requests`. I add tire records when the maintenance request is submitted (not after approval), so I can track requests and prevent duplicate pending/processing requests for the same tire. The `Tire` model has a relation to completed maintenance requests.
+- **Stock management:** The task mentioned `implementing underlying stock management`, but I didn't find such a feature in the existing repo. I added a simple `quantity` column to the `Tire` model for this purpose.
+- **RabbitMQ:** Jobs are dispatched on each request status change to the `database` connection. If RabbitMQ is set up, it's easy to switch the connection and dispatch there.
+- **Job payloads:** Jobs receive plain object IDs, not whole objects, to avoid issues with message size limits in RabbitMQ (and similar systems).
+- **Database optimization:** I only added indices to the new tables I created, not the previous schema. This should be sufficient for a proof of concept.
+- **Feedback:** Let me know when we can discuss the code. I'd be happy to hear your thoughts!
+- **I'm sure I'm forgetting something :D**
+
+---
 
 ## Prerequisites
 
@@ -86,6 +106,30 @@ The documentation includes:
 - All endpoints, parameters, and request/response schemas
 - Business rules and error responses
 - Schema definitions for Tire Maintenance Requests and Tires
+
+---
+
+## 🛠️ Makefile Commands
+
+The project provides a Makefile with helpful commands for development and maintenance:
+
+- `make docs` — Generates the OpenAPI documentation using l5-swagger (`php artisan l5-swagger:generate`).
+- `make work-queues` — Starts the Laravel queue worker (`php artisan queue:work`).
+- `make clear-logs` — Clears the application log file (`echo "" > storage/logs/laravel.log`).
+
+These commands simplify common tasks and are especially useful in development and CI environments.
+
+---
+
+## 🐚 .psysh.php (Tinker Autoload Helper)
+
+The `.psysh.php` file is a custom configuration for Laravel Tinker (PsySH) that:
+
+- Automatically creates class aliases for all classes, interfaces, traits, and enums in the `app/` directory.
+- Allows you to use class names directly in Tinker without specifying their full namespace (e.g., `User` instead of `App\Models\User`).
+- Handles naming conflicts by prefixing the alias with the parent directory name and notifies you in the Tinker session if any aliases were prefixed.
+
+This makes interactive debugging and experimentation in Tinker much more convenient and productive.
 
 ---
 
