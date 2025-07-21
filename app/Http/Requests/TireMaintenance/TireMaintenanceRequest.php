@@ -6,6 +6,7 @@ namespace App\Http\Requests\TireMaintenance;
 
 use App\Enums\TireMaintenance\TirePositionEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rules\Enum;
 
 class TireMaintenanceRequest extends FormRequest
@@ -26,7 +27,7 @@ class TireMaintenanceRequest extends FormRequest
         return [
             'user_id' => ['integer'],
             'car_id' => ['required', 'integer'],
-            'maintenance_scheduled_at' => ['required', 'date'],
+            'maintenance_scheduled_at' => ['required', 'date', 'after:' . Carbon::now()->addDay()->toDateTimeString()],
             'tires' => ['required', 'array'],
             'tires.*.tire_id' => ['required', 'integer'],
             'tires.*.position' => ['required', 'string', new Enum(TirePositionEnum::class)],

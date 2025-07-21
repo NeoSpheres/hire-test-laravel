@@ -164,16 +164,22 @@ class TireMaintenanceService implements ITireMaintenanceService
 
         $this->validateStatusTransition($tireMaintenanceRequest, $status);
 
+        $event = null;
+
         switch ($status) {
             case TireMaintenanceRequestStatusEnum::IN_PROGRESS:
                 $tireMaintenanceRequest->status = $status;
 
-                event(new TireMaintenanceRequestInProgressEvent($tireMaintenanceRequest));
+                $event = TireMaintenanceRequestInProgressEvent::class;
+
                 break;
             case TireMaintenanceRequestStatusEnum::COMPLETED:
                 $tireMaintenanceRequest->status = $status;
+                $tireMaintenanceRequest->car->last_maintenance_date = Carbon::now()->toDateString();
+                $tireMaintenanceRequest->car->save();
 
-                event(new TireMaintenanceRequestCompletedEvent($tireMaintenanceRequest));
+                $event = TireMaintenanceRequestCompletedEvent::class;
+
                 break;
             case TireMaintenanceRequestStatusEnum::CANCELLED:
                 // Re-stock tires
@@ -193,13 +199,17 @@ class TireMaintenanceService implements ITireMaintenanceService
 
                 $tireMaintenanceRequest->status = $status;
 
-                event(new TireMaintenanceRequestCancelledEvent($tireMaintenanceRequest));
+                $event = TireMaintenanceRequestCancelledEvent::class;
                 break;
             default:
                 throw new StateConflictException(__('Invalid status transition.'));
         }
 
         $tireMaintenanceRequest->save();
+
+        if (!is_null($event)) {
+            event(new $event($tireMaintenanceRequest));
+        }
 
         return new TireMaintenanceRequestResource($tireMaintenanceRequest);
     }

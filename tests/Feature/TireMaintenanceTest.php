@@ -7,6 +7,7 @@ use App\Enums\TireMaintenance\TirePositionEnum;
 use App\Events\TireMaintenance\TireMaintenanceRequestCancelledEvent;
 use App\Events\TireMaintenance\TireMaintenanceRequestCompletedEvent;
 use App\Events\TireMaintenance\TireMaintenanceRequestInProgressEvent;
+use App\Models\Brand;
 use App\Models\Car;
 use App\Models\CarModel;
 use App\Models\Tire;
@@ -48,7 +49,7 @@ class TireMaintenanceTest extends TestCase
         $payload = [
             'car_id' => $car->id,
             'user_id' => $user->id,
-            'maintenance_scheduled_at' => now()->addDay()->toDateTimeString(),
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
             'tires' => [
                 [
                     'tire_id' => $tire->id,
@@ -76,7 +77,7 @@ class TireMaintenanceTest extends TestCase
         $payload = [
             'car_id' => $car->id,
             'user_id' => $user->id,
-            'maintenance_scheduled_at' => now()->addDay()->toDateTimeString(),
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
             'tires' => [
                 [
                     'tire_id' => $tire->id,
@@ -100,7 +101,7 @@ class TireMaintenanceTest extends TestCase
         $payload = [
             'car_id' => $car->id,
             'user_id' => $user->id,
-            'maintenance_scheduled_at' => now()->addDay()->toDateTimeString(),
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
             'tires' => [
                 [
                     'tire_id' => $tire->id,
@@ -115,6 +116,128 @@ class TireMaintenanceTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_index_endpoint_filters_by_car_model()
+    {
+        $carModel = CarModel::factory()->create(['nomModel' => 'UniqueModelName']);
+        $user = User::factory()->create();
+        $tire = Tire::factory()->create();
+        $car = Car::factory()->create([
+            'model_id' => $carModel->id,
+            'user_id' => $user->id,
+            'front_tire_id' => $tire->id,
+            'rear_tire_id' => $tire->id,
+            'matricule' => 'ABC-123-XYZ',
+        ]);
+        // Create a maintenance request for this car
+        $payload = [
+            'car_id' => $car->id,
+            'user_id' => $user->id,
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
+            'tires' => [
+                [
+                    'tire_id' => $tire->id,
+                    'position' => 'front_left',
+                ],
+            ],
+        ];
+        $this->postJson('/api/tire-maintenance', $payload)->assertStatus(200);
+
+        $response = $this->getJson('/api/tire-maintenance?filters[car_model]=UniqueModelName');
+        $response->assertStatus(200);
+        $this->assertNotEmpty($response->json('data'));
+    }
+
+    public function test_index_endpoint_filters_by_car_brand()
+    {
+        $brand = Brand::factory()->create(['name' => 'UniqueBrandName']);
+        $carModel = CarModel::factory()->create(['brand_id' => $brand->id]);
+        $user = User::factory()->create();
+        $tire = Tire::factory()->create();
+        $car = Car::factory()->create([
+            'model_id' => $carModel->id,
+            'user_id' => $user->id,
+            'front_tire_id' => $tire->id,
+            'rear_tire_id' => $tire->id,
+            'matricule' => 'DEF-456-UVW',
+        ]);
+        $payload = [
+            'car_id' => $car->id,
+            'user_id' => $user->id,
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
+            'tires' => [
+                [
+                    'tire_id' => $tire->id,
+                    'position' => 'front_left',
+                ],
+            ],
+        ];
+        $this->postJson('/api/tire-maintenance', $payload)->assertStatus(200);
+
+        $response = $this->getJson('/api/tire-maintenance?filters[car_brand]=UniqueBrandName');
+        $response->assertStatus(200);
+        $this->assertNotEmpty($response->json('data'));
+    }
+
+    public function test_index_endpoint_filters_by_plate_number()
+    {
+        $carModel = CarModel::factory()->create();
+        $user = User::factory()->create();
+        $tire = Tire::factory()->create();
+        $car = Car::factory()->create([
+            'model_id' => $carModel->id,
+            'user_id' => $user->id,
+            'front_tire_id' => $tire->id,
+            'rear_tire_id' => $tire->id,
+            'matricule' => 'XYZ-999-PLT',
+        ]);
+        $payload = [
+            'car_id' => $car->id,
+            'user_id' => $user->id,
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
+            'tires' => [
+                [
+                    'tire_id' => $tire->id,
+                    'position' => 'front_left',
+                ],
+            ],
+        ];
+        $this->postJson('/api/tire-maintenance', $payload)->assertStatus(200);
+
+        $response = $this->getJson('/api/tire-maintenance?filters[plate_number]=XYZ-999-PLT');
+        $response->assertStatus(200);
+        $this->assertNotEmpty($response->json('data'));
+    }
+
+    public function test_index_endpoint_filters_by_username()
+    {
+        $carModel = CarModel::factory()->create();
+        $user = User::factory()->create(['name' => 'UniqueUserName']);
+        $tire = Tire::factory()->create();
+        $car = Car::factory()->create([
+            'model_id' => $carModel->id,
+            'user_id' => $user->id,
+            'front_tire_id' => $tire->id,
+            'rear_tire_id' => $tire->id,
+            'matricule' => 'GHI-789-QRS',
+        ]);
+        $payload = [
+            'car_id' => $car->id,
+            'user_id' => $user->id,
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
+            'tires' => [
+                [
+                    'tire_id' => $tire->id,
+                    'position' => 'front_left',
+                ],
+            ],
+        ];
+        $this->postJson('/api/tire-maintenance', $payload)->assertStatus(200);
+
+        $response = $this->getJson('/api/tire-maintenance?filters[username]=UniqueUserName');
+        $response->assertStatus(200);
+        $this->assertNotEmpty($response->json('data'));
+    }
+
     public function test_can_process_tire_maintenance_request()
     {
         $car = Car::inRandomOrder()->first();
@@ -124,7 +247,7 @@ class TireMaintenanceTest extends TestCase
         $payload = [
             'car_id' => $car->id,
             'user_id' => $user->id,
-            'maintenance_scheduled_at' => now()->addDay()->toDateTimeString(),
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
             'tires' => [
                 [
                     'tire_id' => $tire->id,
@@ -153,7 +276,7 @@ class TireMaintenanceTest extends TestCase
         $payload = [
             'car_id' => $car->id,
             'user_id' => $user->id,
-            'maintenance_scheduled_at' => now()->addDay()->toDateTimeString(),
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
             'tires' => [
                 [
                     'tire_id' => $tire->id,
@@ -199,7 +322,7 @@ class TireMaintenanceTest extends TestCase
         $payload = [
             'car_id' => $car->id,
             'user_id' => $user->id,
-            'maintenance_scheduled_at' => now()->addDay()->toDateTimeString(),
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
             'tires' => [
                 [
                     'tire_id' => $tire->id,
@@ -236,5 +359,75 @@ class TireMaintenanceTest extends TestCase
             ->assertStatus(200);
         \Queue::assertPushed(NotifyUserTireMaintenanceRequestStatusJob::class);
         \Queue::assertPushed(TireMaintenanceRequestStatusJob::class);
+    }
+
+    public function test_process_request_changes_status()
+    {
+        $carModel = CarModel::factory()->create();
+        $user = User::factory()->create();
+        $tire = Tire::factory()->create();
+        $car = Car::factory()->create([
+            'model_id' => $carModel->id,
+            'user_id' => $user->id,
+            'front_tire_id' => $tire->id,
+            'rear_tire_id' => $tire->id,
+        ]);
+        $payload = [
+            'car_id' => $car->id,
+            'user_id' => $user->id,
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
+            'tires' => [
+                [
+                    'tire_id' => $tire->id,
+                    'position' => 'front_left',
+                ],
+            ],
+        ];
+        $createResponse = $this->postJson('/api/tire-maintenance', $payload);
+        $createResponse->assertStatus(200);
+        $requestId = $createResponse->json('data.id');
+
+        $inProgressResponse = $this->putJson("/api/tire-maintenance/process/{$requestId}", ['status' => TireMaintenanceRequestStatusEnum::IN_PROGRESS->value])
+            ->assertStatus(200);
+
+        $this->assertEquals($inProgressResponse->json('data.status'), TireMaintenanceRequestStatusEnum::IN_PROGRESS->value);
+    }
+
+    public function test_process_request_completed_updates_car_last_maintenance_date()
+    {
+        $carModel = CarModel::factory()->create();
+        $user = User::factory()->create();
+        $tire = Tire::factory()->create();
+        $car = Car::factory()->create([
+            'model_id' => $carModel->id,
+            'user_id' => $user->id,
+            'front_tire_id' => $tire->id,
+            'rear_tire_id' => $tire->id,
+        ]);
+        $payload = [
+            'car_id' => $car->id,
+            'user_id' => $user->id,
+            'maintenance_scheduled_at' => now()->addDays(2)->toDateTimeString(),
+            'tires' => [
+                [
+                    'tire_id' => $tire->id,
+                    'position' => 'front_left',
+                ],
+            ],
+        ];
+        $createResponse = $this->postJson('/api/tire-maintenance', $payload);
+        $createResponse->assertStatus(200);
+        $requestId = $createResponse->json('data.id');
+
+        // Move to IN_PROGRESS first
+        $this->putJson("/api/tire-maintenance/process/{$requestId}", ['status' => TireMaintenanceRequestStatusEnum::IN_PROGRESS->value])
+            ->assertStatus(200);
+        // Now complete
+        $this->putJson("/api/tire-maintenance/process/{$requestId}", ['status' => TireMaintenanceRequestStatusEnum::COMPLETED->value])
+            ->assertStatus(200);
+
+        $car->refresh();
+        $this->assertNotNull($car->last_maintenance_date);
+        $this->assertEquals(now()->toDateString(), $car->last_maintenance_date->toDateString());
     }
 }
