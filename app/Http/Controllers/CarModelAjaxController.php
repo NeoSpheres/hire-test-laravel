@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\CarModel;
+use App\Models\EngineType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,7 +16,9 @@ class CarModelAjaxController extends Controller
     public function index()
     {
         $brands = Brand::all();
-        return view('datatable.models.index', compact('brands'));
+        $engineTypes = EngineType::all();
+
+        return view('datatable.models.index', compact('brands', 'engineTypes'));
 
     }
 
@@ -34,28 +37,36 @@ class CarModelAjaxController extends Controller
                                                 // which column index should be sorted
                                                 // 0 = id, 1 = nomModel, 2 = brand_id , 3 = engine
 
-        $columnName = $columnNameArray[$columnIndex]['data']; // Here we will get column name,
-                                                            // Base on the index we get
+        $columnName = [
+            'id' => 'modeles.id',
+            'nomModel' => 'modeles.nomModel',
+            'brand_id' => 'modeles.brand_id',
+            'engine_type_name' => 'engine_types.name',
+        ][$columnNameArray[$columnIndex]['data'] ?? 'id'];
 
         $columnSortOrder = $orderArray[0]['dir']; // This will get us order direction(ASC/DESC)
         $searchValue = $searchArray['value']; // This is search value
 
-        $models = CarModel::query()->select('modeles.id', 'modeles.nomModel', 'modeles.brand_id', 'modeles.engine')
-            ->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id'); // Jointure avec la table brands
+        $models = CarModel::query()->select('modeles.id', 'modeles.nomModel', 'modeles.brand_id', 'modeles.engine_type_id', 'engine_types.name as engine_type_name')
+            ->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id')
+            ->leftJoin('engine_types', 'modeles.engine_type_id', '=', 'engine_types.id');
         $total = $models->count();
 
-        $totalFilterModels = CarModel::query()->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id');
+        $totalFilterModels = CarModel::query()
+            ->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id')
+            ->leftJoin('engine_types', 'modeles.engine_type_id', '=', 'engine_types.id');
         if (!empty($searchValue)) {
             $totalFilterModels = $totalFilterModels->where(function($query) use ($searchValue) {
                 $query->where('modeles.nomModel', 'like', '%' . $searchValue . '%')
-                    ->orWhere('modeles.engine', 'like', '%' . $searchValue . '%')
+                    ->orWhere('engine_types.name', 'like', '%' . $searchValue . '%')
                     ->orWhere('brands.name', 'like', '%' . $searchValue . '%');
             });
         }
         $totalFilter = $totalFilterModels->count();
 
-        $arrData = CarModel::query()->select('modeles.id', 'modeles.nomModel', 'modeles.brand_id', 'modeles.engine')
+        $arrData = CarModel::query()->select('modeles.id', 'modeles.nomModel', 'modeles.brand_id', 'modeles.engine_type_id', 'engine_types.name as engine_type_name')
             ->leftJoin('brands', 'modeles.brand_id', '=', 'brands.id')
+            ->leftJoin('engine_types', 'modeles.engine_type_id', '=', 'engine_types.id')
             ->skip($start)
             ->take($rowPerPage)
             ->orderBy($columnName, $columnSortOrder);
@@ -63,7 +74,7 @@ class CarModelAjaxController extends Controller
         if (!empty($searchValue)) {
             $arrData = $arrData->where(function($query) use ($searchValue) {
                 $query->where('modeles.nomModel', 'like', '%' . $searchValue . '%')
-                    ->orWhere('modeles.engine', 'like', '%' . $searchValue . '%')
+                    ->orWhere('engine_types.name', 'like', '%' . $searchValue . '%')
                     ->orWhere('brands.name', 'like', '%' . $searchValue . '%');
             });
         }
@@ -95,7 +106,7 @@ class CarModelAjaxController extends Controller
         $input = validator::make($request-> all(), [
             'nomModel' => 'required|string',
             'brand_id' => 'required',
-            'engine' => 'required|in:Petrol,Hybrid,Electric',
+            'engine_type_id' => 'required|exists:engine_types,id',
         ]);
 
         if ($input->fails()) {
@@ -107,7 +118,7 @@ class CarModelAjaxController extends Controller
             $model = CarModel::query()->create([
                 'nomModel' => $request->nomModel,
                 'brand_id' => $request->brand_id,
-                'engine' => $request->engine,
+                'engine_type_id' => $request->engine_type_id,
             ]);
 
             return response()->json([
@@ -124,11 +135,12 @@ class CarModelAjaxController extends Controller
     public function show(Request $request)
     {
         $id = $request->query('id');
-        $model = CarModel::findOrFail($id);
+        $model = CarModel::with('engineType')->findOrFail($id);
         $brand = Brand::query()->findOrFail($model->brand_id);
         return response()->json([
             'data' => $model,
             'brand' => $brand,
+            'engineType' => $model->engineType,
         ]);
     }
 
@@ -138,12 +150,13 @@ class CarModelAjaxController extends Controller
     public function edit(Request $request)
     {
         $where = array('id' => $request->id);
-        $model = CarModel::query()->where($where)->first();
+        $model = CarModel::query()->with('engineType')->where($where)->firstOrFail();
         $brand = Brand::query()->findOrFail($model->brand_id);
         return response()->json([
             'status' => 200,
             'data' => $model,
             'brand' => $brand,
+            'engineType' => $model->engineType,
         ]);
     }
 
@@ -157,7 +170,7 @@ class CarModelAjaxController extends Controller
         $input = validator::make($request-> all(), [
             'nomModel' => 'required|string',
             'brand_id' => 'required',
-            'engine' => 'required|in:Petrol,Hybrid,Electric',
+            'engine_type_id' => 'required|exists:engine_types,id',
         ]);
 
         $model = CarModel::findOrFail($id);
@@ -171,7 +184,7 @@ class CarModelAjaxController extends Controller
             $model->update([
                 'nomModel' => $request->input('nomModel'),
                 'brand_id' => $request->input('brand_id'),
-                'engine' => $request->input('engine'),
+                'engine_type_id' => $request->input('engine_type_id'),
             ]);
             return response()->json([
                 'status' => 200,

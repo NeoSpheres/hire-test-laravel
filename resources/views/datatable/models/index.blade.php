@@ -47,11 +47,10 @@
 
                         <div class="form-group">
                             <label>Engine</label>
-                            <select id="engine" name="engine" class="form-control">
-                                <option selected>Hybrid</option>
-                                <option value="Hybrid">Hybrid</option>
-                                <option value="Electric">Electric</option>
-                                <option value="Petrol">Petrol</option>
+                            <select id="engine_type_id" name="engine_type_id" class="form-control">
+                                @foreach($engineTypes as $engineType)
+                                    <option value="{{ $engineType->id }}">{{ $engineType->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
@@ -95,11 +94,10 @@
                         </div>
                         <div class="form-group">
                             <label>Engine</label>
-                            <select id="edit-engine" name="edit-engine" class="form-control">
-                                <option selected>Electric</option>
-                                <option value="Hybrid">Hybrid</option>
-                                <option value="Electric">Electric</option>
-                                <option value="Petrol">Petrol</option>
+                            <select id="edit-engine_type_id" name="edit-engine_type_id" class="form-control">
+                                @foreach($engineTypes as $engineType)
+                                    <option value="{{ $engineType->id }}">{{ $engineType->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="modal-footer">
@@ -156,7 +154,7 @@
                             return brand ? brand.name : data;
                         }
                     },
-                    { data: 'engine', name: 'engine' },
+                    { data: 'engine_type_name', name: 'engine_types.name' },
 
                     {
                         data: null,
@@ -209,7 +207,7 @@
                 var data = {
                     'nomModel': $('#edit-nomModel').val(),
                     'brand_id': idB,
-                    'engine': $('#edit-engine').val(),
+                    'engine_type_id': $('#edit-engine_type_id').val(),
                 }
                 $.ajax({
                     type: 'PATCH',
@@ -255,7 +253,7 @@
                         '<strong>Marque : </strong>' + response.brand.name +
                         '</div>' +
                         '<div class="mb-3">' +
-                        '<strong>Type : </strong>' + response.data.engine +
+                        '<strong>Type : </strong>' + (response.engineType ? response.engineType.name : '') +
                         '</div>' +
                         '</div>' +
                         '</div>';
@@ -296,7 +294,7 @@
                     $('#editBrand-id').val(response.data.brand_id);
                     $('#edit-nomModel').val(response.data.nomModel);
                     $('#edit-brand_id').val(response.brand.name);
-                    $('#edit-engine').val(response.data.engine);
+                    $('#edit-engine_type_id').val(response.data.engine_type_id);
 
                     fetch('/get-models/' + response.brand.id)
                         .then(response => response.json())
@@ -345,4 +343,3 @@
     </script>
 
 @endsection
-

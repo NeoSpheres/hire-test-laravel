@@ -8,8 +8,9 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ./:/var/www
+            - vendor:/var/www/vendor
         ports:
-            - "9000:9000"
+            - "9001:9000"
         working_dir: /var/www
         depends_on:
             - postgres_db_htl
@@ -50,3 +51,6 @@ services:
             PGADMIN_DEFAULT_PASSWORD: password
         volumes:
             - ./servers.json:/pgadmin4/servers.json
+
+volumes:
+    vendor:

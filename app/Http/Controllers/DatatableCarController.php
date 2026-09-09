@@ -138,7 +138,7 @@ class DatatableCarController extends Controller
     public function getModelsByBrand($brandId)
     {
         try {
-            $models = CarModel::where('brand_id', $brandId)->get();
+            $models = CarModel::where('id', $brandId)->get();
             return response()->json($models);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Something went wrong'], 500);
